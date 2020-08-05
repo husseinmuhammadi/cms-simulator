@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Entry</title>
+    <div th:replace="fragments/header::head"></div>
+</head>
+<body>
+<div th:replace="fragments/header::header"></div>
+<div class="container">
+    <h1>Product Entry</h1>
+
+    <form action="#" th:action="@{/product/save}" th:object="${product}" method="post">
+        <p>
+            Name: <input type="text" th:field="*{productName}">
+        </p>
+        <p>
+            Code: <input type="text" th:field="*{productCode}">
+        </p>
+        <p>
+            Currency: <input type="text" th:field="*{currency}">
+        </p>
+        <p>
+            Price: <input type="number" th:field="*{amount}">
+        </p>
+        <p>
+            <input type="submit" value="Submit"/>
+            <a th:href="@{/product/list}">Cancel</a>
+        </p>
+    </form>
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

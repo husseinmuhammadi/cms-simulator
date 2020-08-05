@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home</title>
+    <th:block th:replace="fragments/header::head"/>
+</head>
+<body>
+<th:block th:replace="fragments/header::header"/>
+<div class="container">
+    <div>
+    <a th:href="@{/product/list}" class="badge badge-primary">Product List</a>
+    <a th:href="@{/product/entry}" class="badge badge-secondary">Add New Product</a>
+    </div>
+    <div>
+        <a th:href="@{/card/issue}" class="badge badge-primary">Issue New Card</a>
+    </div>
+</div>
+<th:block th:replace="fragments/footer::footer"/>
+</body>
+</html>

@@ -1,0 +1,21 @@
+.bg {
+    /* The image used */
+    background-image: url(/images/LiquidImplant2_Novacutis-1.jpg);
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.1;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-verify{
+    margin-left: 10%;
+    margin-top: 20%;
+}
