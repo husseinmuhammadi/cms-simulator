@@ -1,0 +1,234 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.asan.cms.grpc;
+
+enum ProcessingCode {
+  DEFAULT = 0;
+  PAYMENT = 1;
+  PURCHASE = 2;
+  DEPOSIT = 3;
+  BALANCE = 4;
+  TRANSFER = 5;
+  CASHOUT = 8;
+  CASHABLE_BALANCE = 9;
+  STATEMENT = 10;
+  CREDIT_REMAINED_DEBT = 101;
+}
+
+// General Transaction Request
+message TransactionRequest {
+    int64   reqId = 1; // id
+    string  cardNo = 2;
+    string  rrn = 3;
+    int64   acquireIIN = 4;
+    int64   clientTime = 5;
+    int32   userId = 6; // user
+    int32   hostId = 7;
+    int32   gatewayId = 8; // gate
+    int64   terminalId = 9;
+    string  refTranId = 10; // refId
+    int32   refTranType = 11; // refType
+    string  test_dateTime = 12; // testTime (yyyy-mm-dd)
+    string  endpoint = 13;
+    int32   process = 14; // processCode or processType
+    int32   condition = 15;
+    string  pin = 16;
+    string  track2 = 17;
+    string  pin2 = 18;
+    string  cvv2 = 19;
+    string  expDate = 20;
+    int64   amount = 21;
+    string  description = 22; // desc
+    string  paymentId = 23; // payId
+    string  agentMobileNo = 24;
+}
+
+message FinancialTransactionRequest {
+    int64   reqId = 1; // id
+    string  cardNo = 2;
+    string  rrn = 3;
+    int64   acquireIIN = 4;
+    int64   clientTime = 5;
+    int32   userId = 6; // user
+    int32   hostId = 7;
+    int32   gatewayId = 8; // gate
+    int64   terminalId = 9;
+    string  refTranId = 10; // refId
+    int32   refTranType = 11; // refType
+    string  test_dateTime = 12; // testTime (yyyy-mm-dd)
+    string  endpoint = 13;
+    int32   condition = 14;
+    string  pin = 15;
+    string  track2 = 16;
+    string  pin2 = 17;
+    string  cvv2 = 18;
+    string  expDate = 19;
+    int64   amount = 20;
+    string  description = 21; // desc
+    string  paymentId = 22; // payId
+    string  agentMobileNo = 23;
+}
+
+message BalanceInquiryRequest {
+    int64   reqId = 1; // id
+    string  cardNo = 2;
+    string  rrn = 3;
+    int64   acquireIIN = 4;
+    int64   clientTime = 5;
+    int32   userId = 6; // user
+    int32   hostId = 7;
+    int32   gatewayId = 8; // gate
+    int64   terminalId = 9;
+    string  refTranId = 10; // refId
+    int32   refTranType = 11; // refType
+    string  test_dateTime = 12; // testTime (yyyy-mm-dd)
+    string  endpoint = 13;
+    int32   process = 14; // processCode or processType
+    int32   condition = 15;
+    string  pin = 16;
+    string  track2 = 17;
+    string  pin2 = 18;
+    string  cvv2 = 19;
+    string  expDate = 20;
+    int64   amount = 21;
+    string  description = 22; // desc
+    string  paymentId = 23; // payId
+    string  agentMobileNo = 24;
+}
+
+message StatementRequest {
+    int64   reqId = 1; // id
+    string  cardNo = 2;
+    string  rrn = 3;
+    int64   acquireIIN = 4;
+    int64   clientTime = 5;
+    int32   userId = 6; // user
+    int32   hostId = 7;
+    int32   gatewayId = 8; // gate
+    int64   terminalId = 9;
+    string  refTranId = 10; // refId
+    int32   refTranType = 11; // refType
+    string  test_dateTime = 12; // testTime (yyyy-mm-dd)
+    string  endpoint = 13;
+    int32   process = 14; // processCode or processType
+    int32   condition = 15;
+    string  pin = 16;
+    string  track2 = 17;
+    string  pin2 = 18;
+    string  cvv2 = 19;
+    string  expDate = 20;
+    int64   amount = 21;
+    string  description = 22; // desc
+    string  paymentId = 23; // payId
+    string  agentMobileNo = 24;
+    int32   statementType = 28; // stType (statement type - 1:normal)
+    string  startTime = 29; // stime (yyyyMMddHHmmss)
+    string  finishTime = 30; // ftime (finish time - empty: now)
+    int32   maxCount = 31; // max (max tran count - 0: no limit),
+    int64   lastTranId = 32; // lastTranId (for pagination - empty: first page)
+}
+
+message FundTransferRequest {
+    int64   reqId = 1; // id
+    string  cardNo = 2;
+    string  rrn = 3;
+    int64   acquireIIN = 4;
+    int64   clientTime = 5;
+    int32   userId = 6; // user
+    int32   hostId = 7;
+    int32   gatewayId = 8; // gate
+    int64   terminalId = 9;
+    string  refTranId = 10; // refId
+    int32   refTranType = 11; // refType
+    string  test_dateTime = 12; // testTime (yyyy-mm-dd)
+    string  endpoint = 13;
+    int32   process = 14; // processCode or processType
+    int32   condition = 15;
+    string  pin = 16;
+    string  track2 = 17;
+    string  pin2 = 18;
+    string  cvv2 = 19;
+    string  expDate = 20;
+    int64   amount = 21;
+    string  description = 22; // desc
+    string  paymentId = 23; // payId
+    string  agentMobileNo = 24;
+    string  destCardNo = 25;
+    string  destDescription = 26; // destDesc
+    int32   destRefTranType = 27; // destRefType
+}
+
+message TransactionResponse {
+    int32   status = 1;
+    string  message = 2;
+    int64   remainedBalance = 3;
+    int64   appliedAmount = 4;
+    int64   tranId = 5;
+    string  refTranId = 6;
+}
+
+message TransactionInquiryRequest {
+    int64   refTranId = 1;
+    int32   refTranType = 2;
+    int32   hostId = 3;
+    int32   gatewayId = 4;
+}
+
+message TransactionInquiryResponse {
+    int32   status = 1;
+    int32   tranStatus = 2;
+    string  rrn = 3;
+    int64   amount = 4;
+    int64   balance = 5;
+}
+
+message CardInfoRequest {
+    string  mobile = 1;
+    int32   group = 2;
+}
+
+message CardInfoResponse {
+    int32   status = 1;
+    string  msg = 2;
+    string  cardNo = 3;
+    int32   cardStat = 4;
+}
+
+message CardRegisterRequest {
+    string  mobile = 1;
+    int32   group = 2;
+}
+
+message CardRegisterResponse {
+    int32   status = 1;
+    string  msg = 2;
+    string  cardNo = 3;
+}
+
+service TransactionService {
+
+    rpc doFinancialTransaction(TransactionRequest) returns (TransactionResponse);
+
+    rpc doPayment(FinancialTransactionRequest) returns (TransactionResponse);
+
+    rpc doPurchase(FinancialTransactionRequest) returns (TransactionResponse);
+
+    rpc doDeposit(FinancialTransactionRequest) returns (TransactionResponse);
+
+    rpc doCashout(FinancialTransactionRequest) returns (TransactionResponse);
+
+    rpc doBalanceInquiry(BalanceInquiryRequest) returns (TransactionResponse);
+
+    rpc doStatement(StatementRequest) returns (TransactionResponse);
+
+    rpc doFundTransfer(FundTransferRequest) returns (TransactionResponse);
+
+    rpc doTransactionReverse(TransactionRequest) returns (TransactionResponse);
+
+    rpc transactionInquiry(TransactionInquiryRequest) returns (TransactionInquiryResponse);
+
+    rpc getCardInfo(CardInfoRequest) returns (CardInfoResponse);
+
+    rpc registerCard(CardRegisterRequest) returns (CardRegisterResponse);
+}
+

@@ -30,7 +30,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.tasnim.trade.eshop" level="INFO" additivity="true">
+    <logger name="com.asan.cms" level="INFO" additivity="true">
         <appender-ref ref="FILE"/>
     </logger>
 

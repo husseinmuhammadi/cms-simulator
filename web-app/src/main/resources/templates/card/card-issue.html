@@ -8,20 +8,17 @@
 <body>
 <div th:replace="fragments/header::header"></div>
 <div class="container">
-    <h1>Product Entry</h1>
+    <h1>Card Issue</h1>
 
-    <form action="#" th:action="@{/product/save}" th:object="${product}" method="post">
+    <form action="#" th:action="@{/card/issue}" th:object="${card}" method="post">
         <p>
-            Name: <input type="text" th:field="*{productName}">
+            Mobile No: <input type="text" th:field="*{mobileNo}">
         </p>
         <p>
-            Code: <input type="text" th:field="*{productCode}">
+            Group: <input type="text" th:field="*{group}">
         </p>
         <p>
-            Currency: <input type="text" th:field="*{currency}">
-        </p>
-        <p>
-            Price: <input type="number" th:field="*{amount}">
+            Status: <input type="text" th:field="*{status}">
         </p>
         <p>
             <input type="submit" value="Submit"/>
