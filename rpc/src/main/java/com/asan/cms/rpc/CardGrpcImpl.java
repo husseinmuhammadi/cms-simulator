@@ -1,5 +1,6 @@
 package com.asan.cms.rpc;
 
+import com.asan.cms.dto.CardStatusInquiryResponse;
 import com.asan.cms.grpc.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -37,7 +38,7 @@ public class CardGrpcImpl extends GrpcTransaction implements CardGrpc {
     }
 
     @Override
-    public int getCardInfo(String mobileNo, int group) {
+    public CardStatusInquiryResponse inquiryStatus(String mobileNo, int group) {
         int port = 8080;
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
                 .usePlaintext()
@@ -45,13 +46,12 @@ public class CardGrpcImpl extends GrpcTransaction implements CardGrpc {
 
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
         CardInfoRequest grpcCardInfoRequest = grpcTransactionGenerator.grpcCardInfoTransaction(mobileNo, group);
-        LOGGER.info("Request received from client:\n" + grpcCardInfoRequest);
         CardInfoResponse grpcCardInfoResponse = stub.getCardInfo(grpcCardInfoRequest);
         byte[] utf8 = grpcCardInfoResponse.getMsg().getBytes(StandardCharsets.UTF_8);
-        LOGGER.info("Response from server: ");
-        LOGGER.info("status: {}", grpcCardInfoResponse.getStatus());
-        LOGGER.info("error message: {}", new String(utf8));
-        return grpcCardInfoResponse.getStatus();
+        CardStatusInquiryResponse response = new CardStatusInquiryResponse();
+        response.setStatus(grpcCardInfoResponse.getStatus());
+        response.setMessage(grpcCardInfoResponse.getMsg());
+        return response;
     }
 
     public void fundTransfer() {

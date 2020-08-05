@@ -8,9 +8,9 @@
 <body>
 <div th:replace="fragments/header::header"></div>
 <div class="container">
-    <h1>Card Issue</h1>
+    <h1>Card Status Inquiry</h1>
 
-    <form action="#" th:action="@{/card/info}" th:object="${card}" method="post">
+    <form action="#" th:action="@{/card/info}" th:object="${card}" id="form1" method="post">
         <p>
             Mobile No: <input type="text" th:field="*{mobileNo}">
         </p>
@@ -23,8 +23,16 @@
         <p>
             <input type="submit" value="Submit"/>
         </p>
+        <p>
+        <div id="ajaxLoadedContent"></div>
+        </p>
     </form>
 </div>
 <div th:replace="fragments/footer::footer"></div>
+<script>
+    $(document).ready(function () {
+        makeAjaxSubmit('form1');
+    });
+</script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.asan.cms.web.controller;
 
 import com.asan.cms.dto.Card;
+import com.asan.cms.dto.CardStatusInquiryResponse;
 import com.asan.cms.rpc.CardGrpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,10 +43,8 @@ public class CardController {
 
     @PostMapping("/info")
     public String info(Model model, Card card) {
-        int status = cardGrpc.getCardInfo(card.getMobileNo(), card.getGroup());
-        LOGGER.info("status: {}", status);
-        card.setStatus(status);
-        model.addAttribute("card", card);
-        return "card/card-status-inquiry";
+        CardStatusInquiryResponse response = cardGrpc.inquiryStatus(card.getMobileNo(), card.getGroup());
+        model.addAttribute("response", response);
+        return "fragments/card-status-inquiry :: card-status-inquiry";
     }
 }
