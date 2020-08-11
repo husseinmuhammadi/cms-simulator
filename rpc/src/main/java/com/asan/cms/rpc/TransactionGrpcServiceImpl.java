@@ -8,14 +8,18 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
 
 @Component
-public class TransactionGrpcServiceImpl extends GrpcTransaction implements TransactionGrpcService {
+public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionGrpcServiceImpl.class);
+
+    @Autowired
+    GrpcTransactionGenerator grpcTransactionGenerator;
 
     @Override
     public PaymentResponse doPaymentTransaction(PaymentRequest paymentRequest) {
@@ -26,7 +30,7 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-        TransactionRequest request = grpcTransactionGenerator.paymentTransaction(paymentRequest.getCardNo(), paymentRequest.getAmount());
+        TransactionRequest request = grpcTransactionGenerator.paymentTransaction(paymentRequest.getCardNo(), paymentRequest.getAmount(), paymentRequest.getGateway(), paymentRequest.getService(), paymentRequest.getReferenceTransactionId(), paymentRequest.getHost());
         TransactionResponse response = stub.doFinancialTransaction(request);
         PaymentResponse paymentResponse = new PaymentResponse(response.getStatus(), response.getMessage());
         paymentResponse.setAppliedAmount(response.getAppliedAmount());
@@ -45,7 +49,7 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-        TransactionRequest request = grpcTransactionGenerator.depositTransaction(depositRequest.getCardNo(), depositRequest.getAmount());
+        TransactionRequest request = grpcTransactionGenerator.depositTransaction(depositRequest.getCardNo(), depositRequest.getAmount(), depositRequest.getGateway(), depositRequest.getService(), depositRequest.getReferenceTransactionId(), depositRequest.getHost());
         TransactionResponse response = stub.doFinancialTransaction(request);
         DepositResponse depositResponse = new DepositResponse(response.getStatus(), response.getMessage());
         depositResponse.setAppliedAmount(response.getAppliedAmount());
@@ -64,7 +68,7 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-        TransactionRequest request = grpcTransactionGenerator.cashoutTransaction(cashoutRequest.getCardNo(), cashoutRequest.getAmount());
+        TransactionRequest request = grpcTransactionGenerator.cashoutTransaction(cashoutRequest.getCardNo(), cashoutRequest.getAmount(), cashoutRequest.getGateway(), cashoutRequest.getService(), cashoutRequest.getReferenceTransactionId(), cashoutRequest.getHost());
         TransactionResponse response = stub.doFinancialTransaction(request);
         CashoutResponse cashoutResponse = new CashoutResponse(response.getStatus(), response.getMessage());
         cashoutResponse.setAppliedAmount(response.getAppliedAmount());
@@ -83,7 +87,7 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-        TransactionRequest request = grpcTransactionGenerator.purchaseTransaction(purchaseRequest.getCardNo(), purchaseRequest.getAmount());
+        TransactionRequest request = grpcTransactionGenerator.purchaseTransaction(purchaseRequest.getCardNo(), purchaseRequest.getAmount(), purchaseRequest.getGateway(), purchaseRequest.getService(), purchaseRequest.getReferenceTransactionId(), purchaseRequest.getHost());
         TransactionResponse response = stub.doFinancialTransaction(request);
         PurchaseResponse purchaseResponse = new PurchaseResponse(response.getStatus(), response.getMessage());
         purchaseResponse.setAppliedAmount(response.getAppliedAmount());
@@ -102,8 +106,8 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-        com.asan.cms.grpc.BalanceInquiryRequest request = grpcTransactionGenerator.balanceInquiryTransaction(balanceInquiryRequest.getCardNo());
-        TransactionResponse response = stub.doBalanceInquiry(request);
+
+        TransactionResponse response = stub.doBalanceInquiry(grpcTransactionGenerator.balanceInquiryTransaction(balanceInquiryRequest.getCardNo(), balanceInquiryRequest.getGateway(), balanceInquiryRequest.getService(), balanceInquiryRequest.getReferenceTransactionId(), balanceInquiryRequest.getHost()));
         BalanceInquiryResponse balanceInquiryResponse = new BalanceInquiryResponse(response.getStatus(), response.getMessage());
         balanceInquiryResponse.setAppliedAmount(response.getAppliedAmount());
         balanceInquiryResponse.setRemainedBalance(response.getRemainedBalance());
@@ -121,8 +125,8 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-        com.asan.cms.grpc.StatementRequest request = grpcTransactionGenerator.statementTransaction(statementRequest.getCardNo());
-        TransactionResponse response = stub.doStatement(request);
+
+        TransactionResponse response = stub.doStatement(grpcTransactionGenerator.statementTransaction(statementRequest.getCardNo()));
         StatementResponse statementResponse = new StatementResponse(response.getStatus(), response.getMessage());
         statementResponse.setAppliedAmount(response.getAppliedAmount());
         statementResponse.setRemainedBalance(response.getRemainedBalance());
@@ -140,13 +144,19 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
 
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
 
-        com.asan.cms.grpc.FundTransferRequest grpcFundTransferRequest = grpcTransactionGenerator.fundTransferTransaction(fundTransferRequest.getSourceCard(), fundTransferRequest.getDestinationCard(), fundTransferRequest.getAmount());
-        TransactionResponse response = stub.doFundTransfer(grpcFundTransferRequest);
+        TransactionResponse response = stub.doFundTransfer(grpcTransactionGenerator.fundTransferTransaction(fundTransferRequest.getSourceCard(), fundTransferRequest.getDestinationCard(), fundTransferRequest.getAmount()));
         FundTransferResponse fundTransferResponse = new FundTransferResponse(response.getStatus(), response.getMessage());
         fundTransferResponse.setAppliedAmount(response.getAppliedAmount());
         fundTransferResponse.setRemainedBalance(response.getRemainedBalance());
         fundTransferResponse.setTranId(response.getTranId());
         fundTransferResponse.setReferenceTranId(response.getRefTranId());
         return fundTransferResponse;
+    }
+
+    @Override
+    public TransactionInquiryResponse doInquiryTransaction(com.asan.cms.dto.TransactionRequest transactionRequest) {
+        // TransactionInquiryRequest inquiryRequest = grpcTransactionGenerator.inquiryTransaction(request);
+
+        return null;
     }
 }

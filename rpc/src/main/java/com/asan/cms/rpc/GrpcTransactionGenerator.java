@@ -6,6 +6,8 @@ import com.asan.transaction.request.TransactionProcessTypeEnum;
 import com.asan.utils.string.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -14,41 +16,36 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+@Component
 public class GrpcTransactionGenerator {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(GrpcTransactionGenerator.class);
 
-    TransactionReferenceGenerator referenceGenerator = new TransactionReferenceGenerator();
+    final TransactionReferenceGenerator referenceGenerator;
 
     long terminalId = 1254;
 
-    private static final GrpcTransactionGenerator INSTANCE;
-
-    static {
-        INSTANCE = new GrpcTransactionGenerator();
+    public GrpcTransactionGenerator(TransactionReferenceGenerator referenceGenerator) {
+        this.referenceGenerator = referenceGenerator;
     }
 
-    public static GrpcTransactionGenerator instance() {
-        return INSTANCE;
+    public TransactionRequest depositTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
+        return financialTransaction(TransactionProcessTypeEnum.Deposit, pan, amount, gateway, service, referenceTransactionId, host);
     }
 
-    public TransactionRequest depositTransaction(String pan, long amount) {
-        return financialTransaction(TransactionProcessTypeEnum.Deposit, pan, amount);
+    public TransactionRequest cashoutTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
+        return financialTransaction(TransactionProcessTypeEnum.Cashout, pan, amount, gateway, service, referenceTransactionId, host);
     }
 
-    public TransactionRequest cashoutTransaction(String pan, long amount) {
-        return financialTransaction(TransactionProcessTypeEnum.Cashout, pan, amount);
+    public TransactionRequest paymentTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
+        return financialTransaction(TransactionProcessTypeEnum.Payment, pan, amount, gateway, service, referenceTransactionId, host);
     }
 
-    public TransactionRequest paymentTransaction(String pan, long amount) {
-        return financialTransaction(TransactionProcessTypeEnum.Payment, pan, amount);
+    public TransactionRequest purchaseTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
+        return financialTransaction(TransactionProcessTypeEnum.Purchase, pan, amount, gateway, service, referenceTransactionId, host);
     }
 
-    public TransactionRequest purchaseTransaction(String pan, long amount) {
-        return financialTransaction(TransactionProcessTypeEnum.Purchase, pan, amount);
-    }
-
-    public BalanceInquiryRequest balanceInquiryTransaction(String pan) {
+    public BalanceInquiryRequest balanceInquiryTransaction(String pan, short gateway, int service, long referenceTransactionId, int host) {
         String description = new StringBuilder().append(TransactionProcessTypeEnum.Balance.name()).append(" from ").append(pan).toString();
 
         return BalanceInquiryRequest.newBuilder()
@@ -157,7 +154,7 @@ public class GrpcTransactionGenerator {
                 .build();
     }
 
-    TransactionRequest financialTransaction(TransactionProcessTypeEnum process, String pan, long amount) {
+    TransactionRequest financialTransaction(TransactionProcessTypeEnum process, String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
         String description = new StringBuilder().append(process.name()).append(" from ").append(pan).append(" amount:").append(amount).toString();
 
         return TransactionRequest.newBuilder()
@@ -165,11 +162,11 @@ public class GrpcTransactionGenerator {
                 .setRrn(referenceGenerator.getRandomRRN())
                 .setAcquireIIN(11561370L)
                 .setUserId(0)
-                .setHostId(99)
-                .setGatewayId(40)
-                .setRefTranType(16)
+                .setHostId(host)
+                .setGatewayId(gateway)
+                .setRefTranType(service)
                 .setTerminalId(terminalId)
-                .setRefTranId(referenceGenerator.getRandomRefTranId())
+                .setRefTranId(String.valueOf(referenceTransactionId))
                 .setPin("")
                 .setAmount(amount)
                 .setDescription(description)

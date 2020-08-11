@@ -1,19 +1,24 @@
 package com.asan.cms.rpc;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.Random;
 
-public class TransactionReferenceGenerator {
+@Component
+public class TransactionReferenceGeneratorImpl implements TransactionReferenceGenerator {
     private String getRandomDigit() {
         Random rand = new Random();
         return rand.nextInt(10) + "";
     }
 
-    protected String getRandomRRN() {
+    @Override
+    public String getRandomRRN() {
         return (new Date().getTime() + getRandomDigit() + getRandomDigit()).substring(3, 15);
     }
 
-    protected String getRandomRefTranId() {
+    @Override
+    public String getRandomRefTranId() {
         return new Date().getTime() + getRandomDigit();
     }
 }

@@ -6,6 +6,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -13,8 +14,11 @@ import java.nio.charset.StandardCharsets;
 import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
 
 @Component
-public class CardGrpcImpl extends GrpcTransaction implements CardGrpc {
+public class CardGrpcImpl implements CardGrpc {
     public static final Logger LOGGER = LoggerFactory.getLogger(CardGrpcImpl.class);
+
+    @Autowired
+    GrpcTransactionGenerator grpcTransactionGenerator;
 
     @Override
     public int registerCard(String mobileNo, int group) {
