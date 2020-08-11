@@ -2,20 +2,6 @@ syntax = "proto3";
 option java_multiple_files = true;
 package com.asan.cms.grpc;
 
-enum ProcessingCode {
-  DEFAULT = 0;
-  PAYMENT = 1;
-  PURCHASE = 2;
-  DEPOSIT = 3;
-  BALANCE = 4;
-  TRANSFER = 5;
-  CASHOUT = 8;
-  CASHABLE_BALANCE = 9;
-  STATEMENT = 10;
-  CREDIT_REMAINED_DEBT = 101;
-}
-
-// General Transaction Request
 message TransactionRequest {
     int64   reqId = 1; // id
     string  cardNo = 2;
@@ -57,16 +43,17 @@ message FinancialTransactionRequest {
     int32   refTranType = 11; // refType
     string  test_dateTime = 12; // testTime (yyyy-mm-dd)
     string  endpoint = 13;
-    int32   condition = 14;
-    string  pin = 15;
-    string  track2 = 16;
-    string  pin2 = 17;
-    string  cvv2 = 18;
-    string  expDate = 19;
-    int64   amount = 20;
-    string  description = 21; // desc
-    string  paymentId = 22; // payId
-    string  agentMobileNo = 23;
+    int32   process = 14; // processCode or processType
+    int32   condition = 15;
+    string  pin = 16;
+    string  track2 = 17;
+    string  pin2 = 18;
+    string  cvv2 = 19;
+    string  expDate = 20;
+    int64   amount = 21;
+    string  description = 22; // desc
+    string  paymentId = 23; // payId
+    string  agentMobileNo = 24;
 }
 
 message BalanceInquiryRequest {
@@ -209,13 +196,13 @@ service TransactionService {
 
     rpc doFinancialTransaction(TransactionRequest) returns (TransactionResponse);
 
-    rpc doPayment(FinancialTransactionRequest) returns (TransactionResponse);
+    rpc doPayment(TransactionRequest) returns (TransactionResponse);
 
-    rpc doPurchase(FinancialTransactionRequest) returns (TransactionResponse);
+    rpc doPurchase(TransactionRequest) returns (TransactionResponse);
 
-    rpc doDeposit(FinancialTransactionRequest) returns (TransactionResponse);
+    rpc doDeposit(TransactionRequest) returns (TransactionResponse);
 
-    rpc doCashout(FinancialTransactionRequest) returns (TransactionResponse);
+    rpc doCashout(TransactionRequest) returns (TransactionResponse);
 
     rpc doBalanceInquiry(BalanceInquiryRequest) returns (TransactionResponse);
 

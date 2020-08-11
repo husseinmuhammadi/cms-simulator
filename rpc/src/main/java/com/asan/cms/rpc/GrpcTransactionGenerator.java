@@ -48,10 +48,10 @@ public class GrpcTransactionGenerator {
         return financialTransaction(TransactionProcessTypeEnum.Purchase, pan, amount);
     }
 
-    public TransactionRequest balanceInquiryTransaction(String pan) {
+    public BalanceInquiryRequest balanceInquiryTransaction(String pan) {
         String description = new StringBuilder().append(TransactionProcessTypeEnum.Balance.name()).append(" from ").append(pan).toString();
 
-        return TransactionRequest.newBuilder()
+        return BalanceInquiryRequest.newBuilder()
                 .setProcess(TransactionProcessTypeEnum.Balance.getValue())
                 .setCardNo(pan)
                 .setRrn(referenceGenerator.getRandomRRN())
