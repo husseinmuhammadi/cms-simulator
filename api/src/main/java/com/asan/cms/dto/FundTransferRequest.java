@@ -4,6 +4,13 @@ public class FundTransferRequest extends FinancialRequest {
     private String sourceCard;
     private String destinationCard;
 
+    public FundTransferRequest() {
+    }
+
+    public FundTransferRequest(Short gateway, Integer service, Long referenceTransactionId, Integer host) {
+        super(gateway, service, referenceTransactionId, host);
+    }
+
     public String getSourceCard() {
         return sourceCard;
     }

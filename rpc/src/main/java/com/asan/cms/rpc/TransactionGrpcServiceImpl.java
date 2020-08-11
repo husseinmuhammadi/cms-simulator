@@ -157,7 +157,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
 
         TransactionResponse response = stub.doFundTransfer(
-                grpcTransactionGenerator.fundTransferTransaction(fundTransferRequest.getSourceCard(), fundTransferRequest.getDestinationCard(), fundTransferRequest.getAmount())
+                grpcTransactionGenerator.fundTransferTransaction(fundTransferRequest.getSourceCard(), fundTransferRequest.getDestinationCard(), fundTransferRequest.getAmount(), fundTransferRequest.getGateway(), fundTransferRequest.getService(), fundTransferRequest.getReferenceTransactionId(), fundTransferRequest.getHost())
         );
         FundTransferResponse fundTransferResponse = new FundTransferResponse(response.getStatus(), response.getMessage());
         fundTransferResponse.setAppliedAmount(response.getAppliedAmount());

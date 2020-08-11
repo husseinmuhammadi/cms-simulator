@@ -48,7 +48,7 @@ public class TransactionController {
             model.addAttribute("statement", new StatementRequest());
             return "transaction/statement";
         } else if (processingCode.equalsIgnoreCase("fundTransfer")) {
-            model.addAttribute("fundTransfer", new FundTransferRequest());
+            model.addAttribute("fundTransfer", new FundTransferRequest((short) 40, 16, referenceTransactionId, 99));
             return "transaction/fund-transfer";
         }
         return null;

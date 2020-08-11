@@ -44,12 +44,14 @@
         </div>
         <div class="btn-group" role="group">
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary" onclick="inquiry('deposit')">Inquiry Request</button>
         </div>
     </form>
     <p/>
     <div id="ajaxLoadedContent"></div>
 </div>
 <th:block th:replace="fragments/footer::footer"/>
+<th:block th:replace="fragments/transaction-scripts::prepare-xhr-transaction-inquiry-request"/>
 <script>
     $(document).ready(function () {
         makeAjaxSubmit('deposit');

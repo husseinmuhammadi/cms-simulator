@@ -106,7 +106,7 @@ public class GrpcTransactionGenerator {
                 .build();
     }
 
-    public FundTransferRequest fundTransferTransaction(String sourceCard, String destinationCard, long amount) {
+    public FundTransferRequest fundTransferTransaction(String sourceCard, String destinationCard, long amount, short gateway, int service, long referenceTransactionId, int host) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
         LocalDateTime now = LocalDateTime.now();
@@ -119,10 +119,10 @@ public class GrpcTransactionGenerator {
                 .setProcess(TransactionProcessTypeEnum.Transfer.getValue())
                 .setCardNo(sourceCard)
                 .setRrn(referenceGenerator.getRandomRRN())
-                .setRefTranId(referenceGenerator.getRandomRefTranId())
-                .setGatewayId(40) // 130
-                .setRefTranType(16)
-                .setHostId(99) // 1193
+                .setRefTranId(String.valueOf(referenceTransactionId))
+                .setGatewayId(gateway) // 130
+                .setRefTranType(service)
+                .setHostId(host) // 1193
                 .setClientTime(Long.parseLong(StringUtils.formatDate(new Date())))
                 .setTerminalId(terminalId)
                 .setAcquireIIN(581672011L)
