@@ -12,4 +12,8 @@ public interface TransactionGrpcService {
     PurchaseResponse doPurchaseTransaction(PurchaseRequest purchaseRequest);
 
     BalanceInquiryResponse doBalanceInquiryTransaction(BalanceInquiryRequest balanceInquiryRequest);
+
+    StatementResponse doStatementTransaction(StatementRequest statementRequest);
+
+    FundTransferResponse doFundTransferTransaction(FundTransferRequest fundTransferRequest);
 }

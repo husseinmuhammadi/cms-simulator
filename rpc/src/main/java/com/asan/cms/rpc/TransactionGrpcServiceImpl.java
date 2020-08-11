@@ -111,4 +111,42 @@ public class TransactionGrpcServiceImpl extends GrpcTransaction implements Trans
         balanceInquiryResponse.setReferenceTranId(response.getRefTranId());
         return balanceInquiryResponse;
     }
+
+    @Override
+    public StatementResponse doStatementTransaction(StatementRequest statementRequest) {
+        LOGGER.info("Statement transaction with gRPC");
+
+        int port = 8080;
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+                .usePlaintext()
+                .build();
+        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
+        com.asan.cms.grpc.StatementRequest request = grpcTransactionGenerator.statementTransaction(statementRequest.getCardNo());
+        TransactionResponse response = stub.doStatement(request);
+        StatementResponse statementResponse = new StatementResponse(response.getStatus(), response.getMessage());
+        statementResponse.setAppliedAmount(response.getAppliedAmount());
+        statementResponse.setRemainedBalance(response.getRemainedBalance());
+        statementResponse.setTranId(response.getTranId());
+        statementResponse.setReferenceTranId(response.getRefTranId());
+        return statementResponse;
+    }
+
+    @Override
+    public FundTransferResponse doFundTransferTransaction(FundTransferRequest fundTransferRequest) {
+        int port = 8080;
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+                .usePlaintext()
+                .build();
+
+        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
+
+        com.asan.cms.grpc.FundTransferRequest grpcFundTransferRequest = grpcTransactionGenerator.fundTransferTransaction(fundTransferRequest.getSourceCard(), fundTransferRequest.getDestinationCard(), fundTransferRequest.getAmount());
+        TransactionResponse response = stub.doFundTransfer(grpcFundTransferRequest);
+        FundTransferResponse fundTransferResponse = new FundTransferResponse(response.getStatus(), response.getMessage());
+        fundTransferResponse.setAppliedAmount(response.getAppliedAmount());
+        fundTransferResponse.setRemainedBalance(response.getRemainedBalance());
+        fundTransferResponse.setTranId(response.getTranId());
+        fundTransferResponse.setReferenceTranId(response.getRefTranId());
+        return fundTransferResponse;
+    }
 }

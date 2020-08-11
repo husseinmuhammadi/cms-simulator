@@ -39,41 +39,61 @@ public class TransactionController {
         } else if (processingCode.equalsIgnoreCase("balanceInquiry")) {
             model.addAttribute("balanceInquiry", new BalanceInquiryRequest());
             return "transaction/balance-inquiry";
+        } else if (processingCode.equalsIgnoreCase("statement")) {
+            model.addAttribute("statement", new StatementRequest());
+            return "transaction/statement";
+        } else if (processingCode.equalsIgnoreCase("fundTransfer")) {
+            model.addAttribute("fundTransfer", new FundTransferRequest());
+            return "transaction/fund-transfer";
         }
         return null;
     }
 
     @PostMapping("/payment")
-    public String payment(Model model, PaymentRequest paymentRequest) {
-        PaymentResponse response = grpcService.doPaymentTransaction(paymentRequest);
+    public String payment(Model model, PaymentRequest request) {
+        PaymentResponse response = grpcService.doPaymentTransaction(request);
         model.addAttribute("response", response);
         return "fragments/transaction/transaction-response :: transaction-response";
     }
 
     @PostMapping("/deposit")
-    public String deposit(Model model, DepositRequest depositRequest) {
-        DepositResponse response = grpcService.doDepositTransaction(depositRequest);
+    public String deposit(Model model, DepositRequest request) {
+        DepositResponse response = grpcService.doDepositTransaction(request);
         model.addAttribute("response", response);
         return "fragments/transaction/transaction-response :: transaction-response";
     }
 
     @PostMapping("/cashout")
-    public String deposit(Model model, CashoutRequest cashoutRequest) {
-        CashoutResponse response = grpcService.doCashoutTransaction(cashoutRequest);
+    public String deposit(Model model, CashoutRequest request) {
+        CashoutResponse response = grpcService.doCashoutTransaction(request);
         model.addAttribute("response", response);
         return "fragments/transaction/transaction-response :: transaction-response";
     }
 
     @PostMapping("/purchase")
-    public String purchase(Model model, PurchaseRequest purchaseRequest) {
-        PurchaseResponse response = grpcService.doPurchaseTransaction(purchaseRequest);
+    public String purchase(Model model, PurchaseRequest request) {
+        PurchaseResponse response = grpcService.doPurchaseTransaction(request);
         model.addAttribute("response", response);
         return "fragments/transaction/transaction-response :: transaction-response";
     }
 
     @PostMapping("/balanceInquiry")
-    public String balanceInquiry(Model model, BalanceInquiryRequest balanceInquiryRequest) {
-        BalanceInquiryResponse response = grpcService.doBalanceInquiryTransaction(balanceInquiryRequest);
+    public String balanceInquiry(Model model, BalanceInquiryRequest request) {
+        BalanceInquiryResponse response = grpcService.doBalanceInquiryTransaction(request);
+        model.addAttribute("response", response);
+        return "fragments/transaction/transaction-response :: transaction-response";
+    }
+
+    @PostMapping("/statement")
+    public String statement(Model model, StatementRequest request) {
+        StatementResponse response = grpcService.doStatementTransaction(request);
+        model.addAttribute("response", response);
+        return "fragments/transaction/transaction-response :: transaction-response";
+    }
+
+    @PostMapping("/fundTransfer")
+    public String fundTransfer(Model model, FundTransferRequest request) {
+        FundTransferResponse response = grpcService.doFundTransferTransaction(request);
         model.addAttribute("response", response);
         return "fragments/transaction/transaction-response :: transaction-response";
     }

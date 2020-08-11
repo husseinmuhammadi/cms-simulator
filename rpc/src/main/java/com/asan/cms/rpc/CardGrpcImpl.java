@@ -53,19 +53,4 @@ public class CardGrpcImpl extends GrpcTransaction implements CardGrpc {
         response.setMessage(grpcCardInfoResponse.getMsg());
         return response;
     }
-
-    public void fundTransfer() {
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
-                .usePlaintext()
-                .build();
-
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        FundTransferRequest fundTransferRequest = grpcTransactionGenerator.fundTransferTransaction("9832551217745378");
-        LOGGER.info("Request received from client:\n" + fundTransferRequest);
-        TransactionResponse statementResponse = stub.doFundTransfer(fundTransferRequest);
-        LOGGER.info("Response received from server:\n" + statementResponse);
-        LOGGER.info("Response {status: {}, message: {}}", statementResponse.getStatus(), statementResponse.getMessage());
-    }
 }

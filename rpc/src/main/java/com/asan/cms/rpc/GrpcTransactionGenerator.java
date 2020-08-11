@@ -109,18 +109,18 @@ public class GrpcTransactionGenerator {
                 .build();
     }
 
-    public FundTransferRequest fundTransferTransaction(String pan) {
+    public FundTransferRequest fundTransferTransaction(String sourceCard, String destinationCard, long amount) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
         LocalDateTime now = LocalDateTime.now();
         Date start = Date.from(now.minusMonths(2).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
-        String description = new StringBuilder().append(TransactionProcessTypeEnum.Transfer.name()).append(" from ").append(pan).toString();
+        String description = new StringBuilder().append(TransactionProcessTypeEnum.Transfer.name()).append(" from ").append(sourceCard).toString();
 
         return FundTransferRequest.newBuilder()
                 .setProcess(TransactionProcessTypeEnum.Transfer.getValue())
-                .setCardNo(pan)
+                .setCardNo(sourceCard)
                 .setRrn(referenceGenerator.getRandomRRN())
                 .setRefTranId(referenceGenerator.getRandomRefTranId())
                 .setGatewayId(40) // 130
@@ -131,12 +131,12 @@ public class GrpcTransactionGenerator {
                 .setAcquireIIN(581672011L)
                 .setUserId(0)
                 .setCondition(TransactionConditionTypeEnum.CardPresent.getValue())
-                .setAmount(1)  // TODO: this is a bug
+                .setAmount(amount)
                 .setDescription(description)
                 .setPaymentId("pay123")
                 .setAgentMobileNo("09121234567")
                 // .setPin("")
-                .setDestCardNo("9832553325401928")
+                .setDestCardNo(destinationCard)
                 .setDestRefTranType(0)
                 .setDestDescription("1")
                 .setEndpoint("gRPC")
