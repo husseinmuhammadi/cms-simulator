@@ -212,7 +212,7 @@ service TransactionService {
 
     rpc doTransactionReverse(TransactionRequest) returns (TransactionResponse);
 
-    rpc transactionInquiry(TransactionInquiryRequest) returns (TransactionInquiryResponse);
+    rpc inquiryTransaction(TransactionInquiryRequest) returns (TransactionInquiryResponse);
 
     rpc getCardInfo(CardInfoRequest) returns (CardInfoResponse);
 

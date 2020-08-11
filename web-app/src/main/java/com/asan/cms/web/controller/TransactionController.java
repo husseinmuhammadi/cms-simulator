@@ -103,10 +103,11 @@ public class TransactionController {
         return "fragments/transaction/transaction-response :: transaction-response";
     }
 
-    @PostMapping("/inquiry")
-    public String inquiry(Model model, FundTransferRequest request) {
-        // FundTransferResponse response = grpcService.doInquiryTransaction(request);
-        // model.addAttribute("response", response);
-        return "fragments/transaction/transaction-response :: transaction-response";
+    @PostMapping("/{processingCode}/inquiry")
+    public String inquiry(Model model, TransactionInquiryRequest request, @PathVariable String processingCode) {
+        LOGGER.info("Inquiring transaction: {}", processingCode);
+        TransactionInquiryResponse response = grpcService.doInquiryTransaction(request);
+        model.addAttribute("response", response);
+        return "fragments/transaction/transaction-inquiry-response :: transaction-inquiry-response";
     }
 }

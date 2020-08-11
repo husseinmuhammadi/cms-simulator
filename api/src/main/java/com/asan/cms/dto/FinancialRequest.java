@@ -4,7 +4,6 @@ public abstract class FinancialRequest extends TransactionRequest {
     private long amount;
 
     public FinancialRequest() {
-        super();
     }
 
     public FinancialRequest(Short gateway, Integer service, Long referenceTransactionId, Integer host) {

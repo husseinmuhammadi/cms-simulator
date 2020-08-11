@@ -200,12 +200,12 @@ public class GrpcTransactionGenerator {
                 .build();
     }
 
-    public TransactionInquiryRequest inquiryTransaction(TransactionRequest request) {
+    public TransactionInquiryRequest inquiryTransaction(Short gateway, Integer service, Long referenceTransactionId, Integer host) {
         return TransactionInquiryRequest.newBuilder()
-                .setRefTranId(Long.parseLong(request.getRefTranId()))
-                .setRefTranType(request.getRefTranType())
-                .setHostId(request.getHostId())
-                .setGatewayId(request.getGatewayId())
+                .setRefTranId(referenceTransactionId)
+                .setRefTranType(service)
+                .setHostId(host)
+                .setGatewayId(gateway)
                 .build();
     }
 }

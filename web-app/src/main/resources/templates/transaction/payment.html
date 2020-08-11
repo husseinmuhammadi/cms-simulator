@@ -14,51 +14,57 @@
     <form th:action="@{/transaction/payment}" th:object="${payment}" id="payment" method="post">
         <div class="form-group">
             <label for="card-no">Card No</label>
-            <input type="text" class="form-control" id="card-no" aria-describedby="card-no-description" placeholder="Card Number" th:field="*{cardNo}">
+            <input type="text" class="form-control" id="card-no" aria-describedby="card-no-description"
+                   placeholder="Card Number" th:field="*{cardNo}">
             <small id="card-no-description" class="form-text text-muted">Sample card number: 9832551217745378</small>
         </div>
         <div class="form-group">
             <label for="amount">Amount</label>
-            <input type="number" class="form-control" id="amount" aria-describedby="amount-description" placeholder="Amount" th:field="*{amount}">
+            <input type="number" class="form-control" id="amount" aria-describedby="amount-description"
+                   placeholder="Amount" th:field="*{amount}">
             <small id="amount-description" class="form-text text-muted">Enter amount</small>
         </div>
         <div class="form-group">
             <label for="gateway">Gateway</label>
-            <input type="number" class="form-control" id="gateway" aria-describedby="gateway-description" placeholder="Gateway" th:field="*{gateway}">
+            <input type="number" class="form-control" id="gateway" aria-describedby="gateway-description"
+                   placeholder="Gateway" th:field="*{gateway}">
             <small id="gateway-description" class="form-text text-muted">Select gateway, Ex: 40: APMobApp</small>
         </div>
         <div class="form-group">
             <label for="service-type">Reference Transaction Type</label>
-            <input type="number" class="form-control" id="service-type" aria-describedby="service-type-description" placeholder="Reference Transaction Type" th:field="*{service}">
-            <small id="service-type-description" class="form-text text-muted">Select type of service (reference transaction type) Ex: 16: Irancell Charge</small>
+            <input type="number" class="form-control" id="service-type" aria-describedby="service-type-description"
+                   placeholder="Reference Transaction Type" th:field="*{service}">
+            <small id="service-type-description" class="form-text text-muted">Select type of service (reference
+                transaction type) Ex: 16: Irancell Charge</small>
         </div>
         <div class="form-group">
             <label for="host-id">Host ID</label>
-            <input type="number" class="form-control" id="host-id" aria-describedby="host-description" placeholder="Host ID" th:field="*{host}">
+            <input type="number" class="form-control" id="host-id" aria-describedby="host-description"
+                   placeholder="Host ID" th:field="*{host}">
             <small id="host-description" class="form-text text-muted">Select host (99: Test Host)</small>
         </div>
         <div class="form-group">
             <label for="acquirer-transaction-id">Ref. Transaction ID</label>
-            <input type="number" class="form-control" id="acquirer-transaction-id" aria-describedby="ref-transaction-id-description" placeholder="Reference Transaction Id" th:field="*{referenceTransactionId}">
-            <small id="ref-transaction-id-description" class="form-text text-muted">This reference transaction id will generate automatically</small>
+            <input type="number" class="form-control" id="acquirer-transaction-id"
+                   aria-describedby="ref-transaction-id-description" placeholder="Reference Transaction Id"
+                   th:field="*{referenceTransactionId}">
+            <small id="ref-transaction-id-description" class="form-text text-muted">This reference transaction id will
+                generate automatically</small>
         </div>
         <div class="btn-group" role="group">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="button" class="btn btn-secondary" onclick="inquiry()">Inquiry Request</button>
+            <button type="button" class="btn btn-secondary" onclick="inquiry('payment')">Inquiry Request</button>
         </div>
     </form>
     <p/>
     <div id="ajaxLoadedContent"></div>
 </div>
 <th:block th:replace="fragments/footer::footer"/>
+<th:block th:replace="fragments/transaction-scripts::prepare-xhr-transaction-inquiry-request"/>
 <script>
     $(document).ready(function () {
         makeAjaxSubmit('payment');
     });
-
-    function inquiry() {
-
-    }
 </script>
 </body>
 </html>
