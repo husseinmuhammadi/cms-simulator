@@ -124,10 +124,10 @@ public class TransactionController {
 }
 
 enum ProcessingCode{
-    PAYMENT(1);
+    PAYMENT(1),
+    PURCHASE(2),;
 
     private final int value;
-
 
     ProcessingCode(int value) {
         this.value = value;
