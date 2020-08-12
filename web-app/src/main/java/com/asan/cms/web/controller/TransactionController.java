@@ -125,7 +125,8 @@ public class TransactionController {
 
 enum ProcessingCode{
     PAYMENT(1),
-    PURCHASE(2),;
+    PURCHASE(2),
+    CASHOUT(8);
 
     private final int value;
 
