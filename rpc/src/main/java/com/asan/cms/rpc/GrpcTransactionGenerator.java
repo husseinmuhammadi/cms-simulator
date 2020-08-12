@@ -29,20 +29,20 @@ public class GrpcTransactionGenerator {
         this.referenceGenerator = referenceGenerator;
     }
 
-    public TransactionRequest depositTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
-        return financialTransaction(TransactionProcessTypeEnum.Deposit, pan, amount, gateway, service, referenceTransactionId, host);
+    public TransactionRequest depositTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host, String rrn) {
+        return financialTransaction(TransactionProcessTypeEnum.Deposit, pan, amount, gateway, service, referenceTransactionId, host, rrn);
     }
 
-    public TransactionRequest cashoutTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
-        return financialTransaction(TransactionProcessTypeEnum.Cashout, pan, amount, gateway, service, referenceTransactionId, host);
+    public TransactionRequest cashoutTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host, String rrn) {
+        return financialTransaction(TransactionProcessTypeEnum.Cashout, pan, amount, gateway, service, referenceTransactionId, host, rrn);
     }
 
-    public TransactionRequest paymentTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
-        return financialTransaction(TransactionProcessTypeEnum.Payment, pan, amount, gateway, service, referenceTransactionId, host);
+    public TransactionRequest paymentTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host, String rrn) {
+        return financialTransaction(TransactionProcessTypeEnum.Payment, pan, amount, gateway, service, referenceTransactionId, host, rrn);
     }
 
-    public TransactionRequest purchaseTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
-        return financialTransaction(TransactionProcessTypeEnum.Purchase, pan, amount, gateway, service, referenceTransactionId, host);
+    public TransactionRequest purchaseTransaction(String pan, long amount, short gateway, int service, long referenceTransactionId, int host, String rrn) {
+        return financialTransaction(TransactionProcessTypeEnum.Purchase, pan, amount, gateway, service, referenceTransactionId, host, rrn);
     }
 
     public BalanceInquiryRequest balanceInquiryTransaction(String pan, short gateway, int service, long referenceTransactionId, int host) {
@@ -154,12 +154,12 @@ public class GrpcTransactionGenerator {
                 .build();
     }
 
-    TransactionRequest financialTransaction(TransactionProcessTypeEnum process, String pan, long amount, short gateway, int service, long referenceTransactionId, int host) {
+    TransactionRequest financialTransaction(TransactionProcessTypeEnum process, String pan, long amount, short gateway, int service, long referenceTransactionId, int host, String rrn) {
         String description = new StringBuilder().append(process.name()).append(" from ").append(pan).append(" amount:").append(amount).toString();
 
         return TransactionRequest.newBuilder()
                 .setCardNo(pan)
-                .setRrn(referenceGenerator.getRandomRRN())
+                .setRrn(rrn)
                 .setAcquireIIN(11561370L)
                 .setUserId(0)
                 .setHostId(host)

@@ -2,41 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="transaction-response">
     <div th:object="${response}">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Status</span>
+        <div class="row">
+            <div class="input-group mb-3 col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Status</span>
+                </div>
+                <input type="text" class="form-control" th:field="*{status}">
             </div>
-            <input type="text" class="form-control" th:field="*{status}">
+            <div class="input-group mb-3 col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Message</span>
+                </div>
+                <input type="text" class="form-control" th:field="*{message}">
+            </div>
         </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Message</span>
+        <div class="row">
+            <div class="input-group mb-3 col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Transaction Id</span>
+                </div>
+                <input type="text" class="form-control" th:field="*{tranId}">
             </div>
-            <input type="text" class="form-control" th:field="*{message}">
+            <div class="input-group mb-3 col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Remained Balance</span>
+                </div>
+                <input type="text" class="form-control" th:field="*{remainedBalance}">
+            </div>
         </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Transaction Id</span>
+        <div class="row">
+            <div class="input-group mb-3 col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Applied Amount</span>
+                </div>
+                <input type="text" class="form-control" th:field="*{appliedAmount}">
             </div>
-            <input type="text" class="form-control" th:field="*{tranId}">
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Remained Balance</span>
+            <div class="input-group mb-3 col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Reference TranId</span>
+                </div>
+                <input type="text" class="form-control" th:field="*{referenceTranId}">
             </div>
-            <input type="text" class="form-control" th:field="*{remainedBalance}">
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Applied Amount</span>
-            </div>
-            <input type="text" class="form-control" th:field="*{appliedAmount}">
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Reference TranId</span>
-            </div>
-            <input type="text" class="form-control" th:field="*{referenceTranId}">
         </div>
     </div>
 </th:block>

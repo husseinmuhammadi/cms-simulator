@@ -7,8 +7,8 @@ public class FundTransferRequest extends FinancialRequest {
     public FundTransferRequest() {
     }
 
-    public FundTransferRequest(Short gateway, Integer service, Long referenceTransactionId, Integer host) {
-        super(gateway, service, referenceTransactionId, host);
+    public FundTransferRequest(Short gateway, Integer service, Long referenceTransactionId, Integer host, String rrn) {
+        super(gateway, service, referenceTransactionId, host, rrn);
     }
 
     public String getSourceCard() {

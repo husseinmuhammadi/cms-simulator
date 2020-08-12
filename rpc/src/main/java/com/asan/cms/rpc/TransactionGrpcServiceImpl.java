@@ -33,7 +33,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
 
         TransactionResponse response = stub.doFinancialTransaction(
-                grpcTransactionGenerator.paymentTransaction(paymentRequest.getCardNo(), paymentRequest.getAmount(), paymentRequest.getGateway(), paymentRequest.getService(), paymentRequest.getReferenceTransactionId(), paymentRequest.getHost())
+                grpcTransactionGenerator.paymentTransaction(paymentRequest.getCardNo(), paymentRequest.getAmount(), paymentRequest.getGateway(), paymentRequest.getService(), paymentRequest.getReferenceTransactionId(), paymentRequest.getHost(), paymentRequest.getRrn())
         );
         PaymentResponse paymentResponse = new PaymentResponse(response.getStatus(), response.getMessage());
         paymentResponse.setAppliedAmount(response.getAppliedAmount());
@@ -54,7 +54,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
 
         TransactionResponse response = stub.doFinancialTransaction(
-                grpcTransactionGenerator.depositTransaction(depositRequest.getCardNo(), depositRequest.getAmount(), depositRequest.getGateway(), depositRequest.getService(), depositRequest.getReferenceTransactionId(), depositRequest.getHost())
+                grpcTransactionGenerator.depositTransaction(depositRequest.getCardNo(), depositRequest.getAmount(), depositRequest.getGateway(), depositRequest.getService(), depositRequest.getReferenceTransactionId(), depositRequest.getHost(), depositRequest.getRrn())
         );
         DepositResponse depositResponse = new DepositResponse(response.getStatus(), response.getMessage());
         depositResponse.setAppliedAmount(response.getAppliedAmount());
@@ -75,7 +75,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
 
         TransactionResponse response = stub.doFinancialTransaction(
-                grpcTransactionGenerator.cashoutTransaction(cashoutRequest.getCardNo(), cashoutRequest.getAmount(), cashoutRequest.getGateway(), cashoutRequest.getService(), cashoutRequest.getReferenceTransactionId(), cashoutRequest.getHost())
+                grpcTransactionGenerator.cashoutTransaction(cashoutRequest.getCardNo(), cashoutRequest.getAmount(), cashoutRequest.getGateway(), cashoutRequest.getService(), cashoutRequest.getReferenceTransactionId(), cashoutRequest.getHost(), cashoutRequest.getRrn())
         );
         CashoutResponse cashoutResponse = new CashoutResponse(response.getStatus(), response.getMessage());
         cashoutResponse.setAppliedAmount(response.getAppliedAmount());
@@ -96,7 +96,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
 
         TransactionResponse response = stub.doFinancialTransaction(
-                grpcTransactionGenerator.purchaseTransaction(purchaseRequest.getCardNo(), purchaseRequest.getAmount(), purchaseRequest.getGateway(), purchaseRequest.getService(), purchaseRequest.getReferenceTransactionId(), purchaseRequest.getHost())
+                grpcTransactionGenerator.purchaseTransaction(purchaseRequest.getCardNo(), purchaseRequest.getAmount(), purchaseRequest.getGateway(), purchaseRequest.getService(), purchaseRequest.getReferenceTransactionId(), purchaseRequest.getHost(), purchaseRequest.getRrn())
         );
         PurchaseResponse purchaseResponse = new PurchaseResponse(response.getStatus(), response.getMessage());
         purchaseResponse.setAppliedAmount(response.getAppliedAmount());
@@ -205,7 +205,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
                 financialRequest.getGateway(),
                 financialRequest.getService(),
                 financialRequest.getReferenceTransactionId(),
-                financialRequest.getHost()
+                financialRequest.getHost(),
+                financialRequest.getRrn()
         );
 
         TransactionResponse grpcReversalResponse = stub.doTransactionReverse(

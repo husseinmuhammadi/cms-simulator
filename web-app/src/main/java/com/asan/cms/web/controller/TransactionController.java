@@ -29,17 +29,19 @@ public class TransactionController {
     public String entry(Model model, @PathVariable("processingCode") String processingCode) {
         LOGGER.info("Processing Code: {}", processingCode);
         long referenceTransactionId = Long.parseLong(referenceGenerator.getRandomRefTranId());
+        String rrn = referenceGenerator.getRandomRRN();
+
         if (processingCode.equalsIgnoreCase("payment")) {
-            model.addAttribute("payment", new PaymentRequest((short) 40, 16, referenceTransactionId, 99));
+            model.addAttribute("payment", new PaymentRequest((short) 40, 16, referenceTransactionId, 99, rrn));
             return "transaction/payment";
         } else if (processingCode.equalsIgnoreCase("deposit")) {
-            model.addAttribute("deposit", new DepositRequest((short) 40, 16, referenceTransactionId, 99));
+            model.addAttribute("deposit", new DepositRequest((short) 40, 16, referenceTransactionId, 99, rrn));
             return "transaction/deposit";
         } else if (processingCode.equalsIgnoreCase("cashout")) {
-            model.addAttribute("cashout", new CashoutRequest((short) 40, 16, referenceTransactionId, 99));
+            model.addAttribute("cashout", new CashoutRequest((short) 40, 16, referenceTransactionId, 99, rrn));
             return "transaction/cashout";
         } else if (processingCode.equalsIgnoreCase("purchase")) {
-            model.addAttribute("purchase", new PurchaseRequest((short) 40, 16, referenceTransactionId, 99));
+            model.addAttribute("purchase", new PurchaseRequest((short) 40, 16, referenceTransactionId, 99, rrn));
             return "transaction/purchase";
         } else if (processingCode.equalsIgnoreCase("balanceInquiry")) {
             model.addAttribute("balanceInquiry", new BalanceInquiryRequest((short) 40, 16, referenceTransactionId, 99));
@@ -48,7 +50,7 @@ public class TransactionController {
             model.addAttribute("statement", new StatementRequest());
             return "transaction/statement";
         } else if (processingCode.equalsIgnoreCase("fundTransfer")) {
-            model.addAttribute("fundTransfer", new FundTransferRequest((short) 40, 16, referenceTransactionId, 99));
+            model.addAttribute("fundTransfer", new FundTransferRequest((short) 40, 16, referenceTransactionId, 99, rrn));
             return "transaction/fund-transfer";
         }
         return null;
