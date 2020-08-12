@@ -2,7 +2,7 @@ package com.asan.cms.dto;
 
 public abstract class TransactionRequest {
     private String cardNo;
-
+    private Integer processingCode;
     private Integer service;
     private Short gateway;
     private Long referenceTransactionId;
@@ -56,5 +56,13 @@ public abstract class TransactionRequest {
 
     public void setHost(Integer host) {
         this.host = host;
+    }
+
+    public Integer getProcessingCode() {
+        return processingCode;
+    }
+
+    public void setProcessingCode(Integer processingCode) {
+        this.processingCode = processingCode;
     }
 }

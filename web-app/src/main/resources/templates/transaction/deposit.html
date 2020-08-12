@@ -51,7 +51,7 @@
     <div id="ajaxLoadedContent"></div>
 </div>
 <th:block th:replace="fragments/footer::footer"/>
-<th:block th:replace="fragments/transaction-scripts::prepare-xhr-transaction-inquiry-request"/>
+<th:block th:replace="fragments/transaction-scripts::inquiry-and-reverse-transaction"/>
 <script>
     $(document).ready(function () {
         makeAjaxSubmit('deposit');

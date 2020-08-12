@@ -18,4 +18,6 @@ public interface TransactionGrpcService {
     FundTransferResponse doFundTransferTransaction(FundTransferRequest fundTransferRequest);
 
     TransactionInquiryResponse doInquiryTransaction(TransactionRequest transactionRequest);
+
+    ReversalResponse doReverseTransaction(FinancialRequest financialRequest);
 }

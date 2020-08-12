@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="prepare-xhr-transaction-inquiry-request">
+<th:block th:fragment="inquiry-and-reverse-transaction">
     <script>
         function inquiry(formId) {
             const form = $('#' + formId);
             var url = form.attr('action') + "/inquiry";
+            $("#ajaxLoadedContent").html('');
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: form.serialize(),
+                success: function (response) {
+                    if ($(response).find('.has-error').length)
+                        form.replaceWith(response);
+                    else
+                        $("#ajaxLoadedContent").html(response);
+                }
+            });
+        }
+        function reverse(formId) {
+            const form = $('#' + formId);
+            var url = form.attr('action') + "/reverse";
             $("#ajaxLoadedContent").html('');
             $.ajax({
                 url: url,

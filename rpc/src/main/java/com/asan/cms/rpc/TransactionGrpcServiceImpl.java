@@ -4,6 +4,7 @@ import com.asan.cms.dto.*;
 
 import com.asan.cms.grpc.TransactionResponse;
 import com.asan.cms.grpc.TransactionServiceGrpc;
+import com.asan.transaction.request.TransactionProcessTypeEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -187,5 +188,34 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         transactionInquiryResponse.setBalance(grpcTransactionInquiryResponse.getBalance());
 
         return transactionInquiryResponse;
+    }
+
+    @Override
+    public ReversalResponse doReverseTransaction(FinancialRequest financialRequest) {
+        int port = 8080;
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+                .usePlaintext()
+                .build();
+
+        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
+        com.asan.cms.grpc.TransactionRequest grpcFinancialRequest = grpcTransactionGenerator.financialTransaction(
+                TransactionProcessTypeEnum.valueOf(financialRequest.getProcessingCode()),
+                financialRequest.getCardNo(),
+                financialRequest.getAmount(),
+                financialRequest.getGateway(),
+                financialRequest.getService(),
+                financialRequest.getReferenceTransactionId(),
+                financialRequest.getHost()
+        );
+
+        TransactionResponse grpcReversalResponse = stub.doTransactionReverse(
+                grpcTransactionGenerator.reversalTransaction(grpcFinancialRequest)
+        );
+        ReversalResponse reversalResponse = new ReversalResponse(grpcReversalResponse.getStatus(), grpcReversalResponse.getMessage());
+        reversalResponse.setAppliedAmount(grpcReversalResponse.getAppliedAmount());
+        reversalResponse.setRemainedBalance(grpcReversalResponse.getRemainedBalance());
+        reversalResponse.setTranId(grpcReversalResponse.getTranId());
+        reversalResponse.setReferenceTranId(grpcReversalResponse.getRefTranId());
+        return reversalResponse;
     }
 }

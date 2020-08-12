@@ -103,11 +103,35 @@ public class TransactionController {
         return "fragments/transaction/transaction-response :: transaction-response";
     }
 
-    @PostMapping("/{processingCode}/inquiry")
-    public String inquiry(Model model, TransactionInquiryRequest request, @PathVariable String processingCode) {
+    @PostMapping("/{processing-code}/inquiry")
+    public String inquiry(Model model, TransactionInquiryRequest request, @PathVariable("processing-code") String processingCode) {
         LOGGER.info("Inquiring transaction: {}", processingCode);
         TransactionInquiryResponse response = grpcService.doInquiryTransaction(request);
         model.addAttribute("response", response);
         return "fragments/transaction/transaction-inquiry-response :: transaction-inquiry-response";
+    }
+
+    @PostMapping("/{processing-code}/reverse")
+    public String reverse(Model model, ReversalRequest reversalRequest, @PathVariable("processing-code") String processingCode) {
+        LOGGER.info("Reversing transaction: {}", processingCode);
+        reversalRequest.setProcessingCode(ProcessingCode.valueOf(processingCode.toUpperCase()).getValue());
+        ReversalResponse reversalResponse = grpcService.doReverseTransaction(reversalRequest);
+        model.addAttribute("response", reversalResponse);
+        return "fragments/transaction/transaction-response :: transaction-response";
+    }
+}
+
+enum ProcessingCode{
+    PAYMENT(1);
+
+    private final int value;
+
+
+    ProcessingCode(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

@@ -23,6 +23,7 @@ public class MyErrorController implements ErrorController {
 
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request, Exception e) {
+        LOGGER.error(e.getMessage(), e);
         LOGGER.info("Do some logic before show the general error page");
 
         ModelAndView errorPage = new ModelAndView("errorPage");
