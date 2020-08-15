@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Random;
+
 @Controller
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -35,7 +37,10 @@ public class TransactionController {
             model.addAttribute("payment", new PaymentRequest((short) 40, 16, referenceTransactionId, 99, rrn));
             return "transaction/payment";
         } else if (processingCode.equalsIgnoreCase("deposit")) {
-            model.addAttribute("deposit", new DepositRequest((short) 40, 16, referenceTransactionId, 99, rrn));
+            DepositRequest depositRequest = new DepositRequest((short) 40, 16, referenceTransactionId, 99, rrn);
+            depositRequest.setCardNo("9832551217745378");
+            depositRequest.setAmount(new Random().nextInt(100) + 1);
+            model.addAttribute("deposit", depositRequest);
             return "transaction/deposit";
         } else if (processingCode.equalsIgnoreCase("cashout")) {
             model.addAttribute("cashout", new CashoutRequest((short) 40, 16, referenceTransactionId, 99, rrn));
@@ -123,9 +128,10 @@ public class TransactionController {
     }
 }
 
-enum ProcessingCode{
+enum ProcessingCode {
     PAYMENT(1),
     PURCHASE(2),
+    DEPOSIT(3),
     CASHOUT(8);
 
     private final int value;
