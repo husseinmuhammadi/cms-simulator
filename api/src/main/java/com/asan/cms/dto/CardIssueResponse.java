@@ -1,10 +1,9 @@
 package com.asan.cms.dto;
 
-public class CardStatusInquiryResponse {
+public class CardIssueResponse {
     int status;
     String message;
-    String cardNo;
-    int cardStatus;
+    private String cardNo;
 
     public int getStatus() {
         return status;
@@ -22,19 +21,11 @@ public class CardStatusInquiryResponse {
         this.message = message;
     }
 
-    public String getCardNo() {
-        return cardNo;
-    }
-
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
     }
 
-    public int getCardStatus() {
-        return cardStatus;
-    }
-
-    public void setCardStatus(int cardStatus) {
-        this.cardStatus = cardStatus;
+    public String getCardNo() {
+        return cardNo;
     }
 }

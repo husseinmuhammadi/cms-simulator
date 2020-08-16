@@ -10,21 +10,35 @@
 <div class="container">
     <h1>Card Issue</h1>
 
-    <form action="#" th:action="@{/card/issue}" th:object="${card}" method="post">
-        <p>
-            Mobile No: <input type="text" th:field="*{mobileNo}">
-        </p>
-        <p>
-            Group: <input type="text" th:field="*{group}">
-        </p>
-        <p>
-            Status: <input type="text" th:field="*{status}">
-        </p>
-        <p>
-            <input type="submit" value="Submit"/>
-        </p>
+    <form action="#" th:action="@{/card/issue}" th:object="${card}" method="post" id="card">
+        <div class="form-group">
+            <label for="mobile-no">Mobile No: </label>
+            <input type="text" class="form-control" aria-describedby="mobile-description" placeholder="Mobile Number"
+                   id="mobile-no" th:field="*{mobileNo}">
+            <small class="" id="mobile-description">
+                Enter mobile number: 09122113358
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="card-group">Group: </label>
+            <input type="text" class="form-control" aria-describedby="group-description" placeholder="Card Group Number"
+                   id="card-group" th:field="*{group}">
+            <small class="form-text text-muted" id="group-description">
+                Enter card group, ex:5
+            </small>
+        </div>
+        <div role="group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </form>
+    <p/>
+    <div id="ajaxLoadedContent"></div>
 </div>
-<div th:replace="fragments/footer::footer"></div>
+<th:block th:replace="fragments/footer::footer"/>
+<script>
+    $(document).ready(function () {
+        makeAjaxSubmit('card');
+    });
+</script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="card-inquiry-response">
+    <div th:object="${response}" class="row">
+        <div class="input-group mb-3 col-6 col-lg-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Status</span>
+            </div>
+            <input type="text" class="form-control" th:field="*{status}">
+        </div>
+        <div class="input-group mb-3 col-6 col-lg-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Message</span>
+            </div>
+            <input type="text" class="form-control" th:field="*{message}">
+        </div>
+        <div class="input-group mb-3 col-6 col-lg-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Card No</span>
+            </div>
+            <input type="text" class="form-control" th:field="*{cardNo}">
+        </div>
+        <div class="input-group mb-3 col-6 col-lg-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Card Status</span>
+            </div>
+            <input type="text" class="form-control" th:field="*{cardStatus}">
+        </div>
+    </div>
+</th:block>
+</html>

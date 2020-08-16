@@ -34,31 +34,39 @@ public class TransactionController {
         String rrn = referenceGenerator.getRandomRRN();
 
         if (processingCode.equalsIgnoreCase("payment")) {
-            model.addAttribute("payment", new PaymentRequest((short) 40, 16, referenceTransactionId, 99, rrn));
+            model.addAttribute("payment", prepare(new PaymentRequest((short) 40, 16, referenceTransactionId, 99, rrn)));
             return "transaction/payment";
         } else if (processingCode.equalsIgnoreCase("deposit")) {
-            DepositRequest depositRequest = new DepositRequest((short) 40, 16, referenceTransactionId, 99, rrn);
-            depositRequest.setCardNo("9832551217745378");
-            depositRequest.setAmount(new Random().nextInt(100) + 1);
-            model.addAttribute("deposit", depositRequest);
+            model.addAttribute("deposit", prepare(new DepositRequest((short) 40, 16, referenceTransactionId, 99, rrn)));
             return "transaction/deposit";
         } else if (processingCode.equalsIgnoreCase("cashout")) {
-            model.addAttribute("cashout", new CashoutRequest((short) 40, 16, referenceTransactionId, 99, rrn));
+            model.addAttribute("cashout", prepare(new CashoutRequest((short) 40, 16, referenceTransactionId, 99, rrn)));
             return "transaction/cashout";
         } else if (processingCode.equalsIgnoreCase("purchase")) {
-            model.addAttribute("purchase", new PurchaseRequest((short) 40, 16, referenceTransactionId, 99, rrn));
+            model.addAttribute("purchase", prepare(new PurchaseRequest((short) 40, 16, referenceTransactionId, 99, rrn)));
             return "transaction/purchase";
         } else if (processingCode.equalsIgnoreCase("balanceInquiry")) {
-            model.addAttribute("balanceInquiry", new BalanceInquiryRequest((short) 40, 16, referenceTransactionId, 99));
+            model.addAttribute("balanceInquiry", prepare(new BalanceInquiryRequest((short) 40, 16, referenceTransactionId, 99)));
             return "transaction/balance-inquiry";
         } else if (processingCode.equalsIgnoreCase("statement")) {
-            model.addAttribute("statement", new StatementRequest());
+            model.addAttribute("statement", prepare(new StatementRequest()));
             return "transaction/statement";
         } else if (processingCode.equalsIgnoreCase("fundTransfer")) {
-            model.addAttribute("fundTransfer", new FundTransferRequest((short) 40, 16, referenceTransactionId, 99, rrn));
+            model.addAttribute("fundTransfer", prepare(new FundTransferRequest((short) 40, 16, referenceTransactionId, 99, rrn)));
             return "transaction/fund-transfer";
         }
         return null;
+    }
+
+    private TransactionRequest prepare(FinancialRequest financialRequest) {
+        financialRequest.setCardNo("9832551217745378");
+        financialRequest.setAmount(new Random().nextInt(100) + 1);
+        return financialRequest;
+    }
+
+    private TransactionRequest prepare(AuthorizationRequest authorizationRequest) {
+        authorizationRequest.setCardNo("9832551217745378");
+        return authorizationRequest;
     }
 
     @PostMapping("/payment")

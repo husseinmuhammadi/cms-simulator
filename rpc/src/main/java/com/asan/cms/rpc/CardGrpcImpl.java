@@ -1,5 +1,6 @@
 package com.asan.cms.rpc;
 
+import com.asan.cms.dto.CardIssueResponse;
 import com.asan.cms.dto.CardStatusInquiryResponse;
 import com.asan.cms.grpc.*;
 import io.grpc.ManagedChannel;
@@ -21,7 +22,7 @@ public class CardGrpcImpl implements CardGrpc {
     GrpcTransactionGenerator grpcTransactionGenerator;
 
     @Override
-    public int registerCard(String mobileNo, int group) {
+    public CardIssueResponse registerCard(String mobileNo, int group) {
         int port = 8080;
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
                 .usePlaintext()
@@ -33,12 +34,13 @@ public class CardGrpcImpl implements CardGrpc {
         grpcCardRegisterRequest = grpcTransactionGenerator.grpcCardRegisterTransaction(mobileNo, group);
         LOGGER.info("Request received from client:\n" + grpcCardRegisterRequest);
         CardRegisterResponse grpcCardRegisterResponse = stub.registerCard(grpcCardRegisterRequest);
-        byte[] utf8 = grpcCardRegisterResponse.getMsg().getBytes(StandardCharsets.UTF_8);
+        CardIssueResponse response = new CardIssueResponse();
+        response.setStatus(grpcCardRegisterResponse.getStatus());
+        response.setMessage(grpcCardRegisterResponse.getMsg());
+        response.setCardNo(grpcCardRegisterResponse.getCardNo());
         LOGGER.info("Response from server: ");
         LOGGER.info("status: {}", grpcCardRegisterResponse.getStatus());
-        LOGGER.info("error message: {}", new String(utf8));
-
-        return grpcCardRegisterResponse.getStatus();
+        return response;
     }
 
     @Override
@@ -55,6 +57,8 @@ public class CardGrpcImpl implements CardGrpc {
         CardStatusInquiryResponse response = new CardStatusInquiryResponse();
         response.setStatus(grpcCardInfoResponse.getStatus());
         response.setMessage(grpcCardInfoResponse.getMsg());
+        response.setCardNo(grpcCardInfoResponse.getCardNo());
+        response.setCardStatus(grpcCardInfoResponse.getCardStat());
         return response;
     }
 }
