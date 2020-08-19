@@ -1,10 +1,9 @@
 package com.asan.cms.rpc;
 
 import com.asan.cms.dto.*;
-
 import com.asan.cms.grpc.TransactionResponse;
 import com.asan.cms.grpc.TransactionServiceGrpc;
-import com.asan.transaction.request.TransactionProcessTypeEnum;
+import com.asan.cms.type.TransactionProcessTypeEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -180,7 +179,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
         com.asan.cms.grpc.TransactionInquiryResponse grpcTransactionInquiryResponse = stub.inquiryTransaction(
                 grpcTransactionGenerator.inquiryTransaction(transactionRequest.getGateway(), transactionRequest.getService(), transactionRequest.getReferenceTransactionId(), transactionRequest.getHost())
         );
-        TransactionInquiryResponse  transactionInquiryResponse= new TransactionInquiryResponse();
+        TransactionInquiryResponse transactionInquiryResponse = new TransactionInquiryResponse();
         transactionInquiryResponse.setStatus(grpcTransactionInquiryResponse.getStatus());
         transactionInquiryResponse.setTransactionStatus(grpcTransactionInquiryResponse.getTranStatus());
         transactionInquiryResponse.setRrn(grpcTransactionInquiryResponse.getRrn());

@@ -10,11 +10,14 @@ CREATE DATABASE cms_test;
 CREATE USER cms_test@localhost IDENTIFIED BY '123456';
 SELECT user, host FROM mysql.user;
 GRANT ALL PRIVILEGES ON cms_test.* TO cms_test@localhost;
-SHOW GRANTS FOR tasnim@localhost;
+SHOW GRANTS FOR cms_test@localhost;
+
+CREATE USER cms_test@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON cms_test.* TO cms_test@'%';
 ````
 #### TABLES
 ````
-MariaDB [tasnim]> show columns from users;
+MariaDB [cms_test]> show columns from users;
 +----------+--------------+------+-----+---------+-------+
 | Field    | Type         | Null | Key | Default | Extra |
 +----------+--------------+------+-----+---------+-------+

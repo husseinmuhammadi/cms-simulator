@@ -3,6 +3,7 @@ package com.asan.cms.web.controller;
 import com.asan.cms.dto.*;
 import com.asan.cms.rpc.TransactionGrpcService;
 import com.asan.cms.rpc.TransactionReferenceGenerator;
+import com.asan.cms.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Optional;
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Controller
 @RequestMapping("/transaction")
 public class TransactionController {
-
     public static final Logger LOGGER = LoggerFactory.getLogger(TransactionController.class);
 
     @Autowired
@@ -62,6 +65,13 @@ public class TransactionController {
         financialRequest.setCardNo("9832551217745378");
         financialRequest.setAmount(new Random().nextInt(100) + 1);
         return financialRequest;
+    }
+
+    private TransactionRequest prepare(FundTransferRequest fundTransferRequest) {
+        fundTransferRequest.setSourceCard("9832551217745378");
+        fundTransferRequest.setDestinationCard("9832553325401928");
+        fundTransferRequest.setAmount(new Random().nextInt(100) + 1);
+        return fundTransferRequest;
     }
 
     private TransactionRequest prepare(AuthorizationRequest authorizationRequest) {
@@ -129,7 +139,8 @@ public class TransactionController {
     @PostMapping("/{processing-code}/reverse")
     public String reverse(Model model, ReversalRequest reversalRequest, @PathVariable("processing-code") String processingCode) {
         LOGGER.info("Reversing transaction: {}", processingCode);
-        reversalRequest.setProcessingCode(ProcessingCode.valueOf(processingCode.toUpperCase()).getValue());
+        reversalRequest.setProcessingCode(ProcessingCode.valueOf(StringUtil.camelToSnake(processingCode).toUpperCase()).getValue());
+        reversalRequest.setCardNo(Optional.ofNullable(reversalRequest.getCardNo()).orElse(""));
         ReversalResponse reversalResponse = grpcService.doReverseTransaction(reversalRequest);
         model.addAttribute("response", reversalResponse);
         return "fragments/transaction/transaction-response :: transaction-response";
@@ -140,7 +151,9 @@ enum ProcessingCode {
     PAYMENT(1),
     PURCHASE(2),
     DEPOSIT(3),
-    CASHOUT(8);
+    CASHOUT(8),
+    FUND_TRANSFER(5),
+    ;
 
     private final int value;
 

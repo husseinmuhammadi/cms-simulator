@@ -95,12 +95,6 @@
                 <artifactId>grpc-stub</artifactId>
                 <version>1.16.1</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.asan</groupId>
-                <artifactId>cms-common-pack</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
