@@ -17,6 +17,7 @@
     </parent>
 
     <build>
+        <finalName>cms-simulator</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -38,6 +39,41 @@
             </resource>
         </resources>
     </build>
+
+
+    <!--
+    Every enterprise application has many environments, like:
+    Dev | Test | Stage | Prod | UAT/Pre-Prod
+    -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <active.profiles>dev,mariadb</active.profiles>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <active.profiles>test,hsql</active.profiles>
+            </properties>
+        </profile>
+        <profile>
+            <id>stage</id>
+            <properties>
+                <active.profiles>stage,hsql</active.profiles>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <active.profiles>prod,postgresql</active.profiles>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>

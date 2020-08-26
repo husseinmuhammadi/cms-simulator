@@ -2,28 +2,33 @@ package com.asan.cms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
 
+@Component
 public class ApplicationInfo {
-    private static final Logger LOGGER = LoggerFactory.getLogger(com.asan.cms.ApplicationInfo.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationInfo.class);
     public static final String APP_INFO = "application-info.properties";
 
     static final Properties properties= new Properties();
     private static final String GRPC_SERVER_PORT = "grpc.server.port";
 
     static {
-        try (InputStream resource = com.asan.cms.ApplicationInfo.class.getClassLoader().getResourceAsStream(APP_INFO)) {
+        try (InputStream resource = ApplicationInfo.class.getClassLoader().getResourceAsStream(APP_INFO)) {
             properties.load(resource);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
 
-    public static void printInfo() {
+    @EventListener
+    public static void printInfo(ApplicationReadyEvent event) {
         Collections.list((Enumeration<String>) properties.propertyNames()).forEach(key -> {
             LOGGER.info("{} : {}", key, properties.getProperty(key));
         });
