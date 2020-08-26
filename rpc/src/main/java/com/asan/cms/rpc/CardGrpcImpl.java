@@ -3,6 +3,7 @@ package com.asan.cms.rpc;
 import com.asan.cms.dto.CardIssueResponse;
 import com.asan.cms.dto.CardStatusInquiryResponse;
 import com.asan.cms.grpc.*;
+import com.asan.cms.rpc.configuration.GrpcEndpointConfiguration;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -16,15 +17,18 @@ import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
 
 @Component
 public class CardGrpcImpl implements CardGrpc {
+
     public static final Logger LOGGER = LoggerFactory.getLogger(CardGrpcImpl.class);
 
     @Autowired
     GrpcTransactionGenerator grpcTransactionGenerator;
 
+    @Autowired
+    GrpcEndpointConfiguration endpoint;
+
     @Override
     public CardIssueResponse registerCard(String mobileNo, int group) {
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
 
@@ -45,8 +49,7 @@ public class CardGrpcImpl implements CardGrpc {
 
     @Override
     public CardStatusInquiryResponse inquiryStatus(String mobileNo, int group) {
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
 

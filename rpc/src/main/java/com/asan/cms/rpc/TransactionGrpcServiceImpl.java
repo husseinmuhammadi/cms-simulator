@@ -3,6 +3,7 @@ package com.asan.cms.rpc;
 import com.asan.cms.dto.*;
 import com.asan.cms.grpc.TransactionResponse;
 import com.asan.cms.grpc.TransactionServiceGrpc;
+import com.asan.cms.rpc.configuration.GrpcEndpointConfiguration;
 import com.asan.cms.type.TransactionProcessTypeEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -20,13 +21,15 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Autowired
     GrpcTransactionGenerator grpcTransactionGenerator;
+    
+    @Autowired
+    GrpcEndpointConfiguration endpoint;
 
     @Override
     public PaymentResponse doPaymentTransaction(PaymentRequest paymentRequest) {
         LOGGER.info("Payment transaction with gRPC");
-
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
@@ -46,8 +49,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     public DepositResponse doDepositTransaction(DepositRequest depositRequest) {
         LOGGER.info("Deposit transaction with gRPC");
 
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
@@ -67,8 +70,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     public CashoutResponse doCashoutTransaction(CashoutRequest cashoutRequest) {
         LOGGER.info("Cashout transaction with gRPC");
 
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
@@ -88,8 +90,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     public PurchaseResponse doPurchaseTransaction(PurchaseRequest purchaseRequest) {
         LOGGER.info("Purchase transaction with gRPC");
 
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
@@ -109,8 +111,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     public BalanceInquiryResponse doBalanceInquiryTransaction(BalanceInquiryRequest balanceInquiryRequest) {
         LOGGER.info("BalanceInquiry transaction with gRPC");
 
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
@@ -130,8 +131,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     public StatementResponse doStatementTransaction(StatementRequest statementRequest) {
         LOGGER.info("Statement transaction with gRPC");
 
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
         TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
@@ -149,8 +150,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Override
     public FundTransferResponse doFundTransferTransaction(FundTransferRequest fundTransferRequest) {
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
 
@@ -169,8 +170,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Override
     public TransactionInquiryResponse doInquiryTransaction(TransactionRequest transactionRequest) {
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
 
@@ -191,8 +192,8 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Override
     public ReversalResponse doReverseTransaction(FinancialRequest financialRequest) {
-        int port = 8080;
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", port)
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
                 .usePlaintext()
                 .build();
 
