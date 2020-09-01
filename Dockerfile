@@ -10,18 +10,17 @@ RUN mkdir -p /root/.m2 \
 # Copy maven settings, containing repository configurations
 COPY settings.xml /root/.m2
 
-WORKDIR /app
-
+WORKDIR /workspace
 COPY ./ ./
-
-RUN mvn -f parent package -DskipTests
-
+RUN mvn -f parent package -DskipTests -Pstage
 
 #
 # Package stage
 #
 FROM openjdk:11-jre-slim
-WORKDIR /app
-COPY --from=build /app/web-app/target/cms-webapp-1.0.0-SNAPSHOT.jar /app/cms.jar
+COPY --from=build /workspace/web-app/target/cms-simulator.jar /app/cms.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/cms.jar"]
+
+# docker build -t cms-simulator:1.0.0 ..
+# docker run -d -p 8090:8090 --name cms-simulator cms-simulator:1.0.0
