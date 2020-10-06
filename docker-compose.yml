@@ -1,41 +1,43 @@
+# https://stackoverflow.com/questions/53738437/php-application-cant-connect-to-mariadb-using-docker-compose
 version: "3.8"
 
 services:
 
   web:
+    links: 
+      - db
     build:
       dockerfile: Dockerfile
       context: .
     ports:
       - "8090:8090"
-    restart: always  
+    # restart: always  
     image: cms-simulator:1.0.0
     container_name: cms-simulator
-    networks:
-      local1:
-        ipv4_address: 10.10.10.2
-    depends_on: 
-      - "db"
-
+    expose: 
+      - 8090
+    environment:       
+      - DATABASE_URL=jdbc:mariadb://db:3306/cms
+      - DATABASE_USERNAME=cmsuser
+      - DATABASE_PASSWORD=cmspass
+    
   db:
     image: mariadb
-    container_name: mariadb-1
+    container_name: mariadb
     command: --init-file /data/init.sql
     volumes:
       - ./init.sql:/data/init.sql
+      # - ./mysql:/var/lib/mysql
     ports:
-      - "3307:3306"
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=123456
-    networks:
-      local1:
-        ipv4_address: 10.10.10.10
+      - "3306:3306"
+    # restart: always
+    environment:      
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: cms
+      MYSQL_USER: cmsuser
+      MYSQL_PASSWORD: cmspass
 
 networks:
-  local1:
+  default:
     driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.10.10.0/28
