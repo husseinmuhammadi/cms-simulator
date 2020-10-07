@@ -16,28 +16,19 @@ import java.nio.charset.StandardCharsets;
 import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
 
 @Component
-public class CardGrpcImpl implements CardGrpc {
+public class CardGrpcImpl extends GrpcClientBase implements CardGrpc {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(CardGrpcImpl.class);
 
     @Autowired
     GrpcTransactionGenerator grpcTransactionGenerator;
 
-    @Autowired
-    GrpcEndpointConfiguration endpoint;
-
     @Override
     public CardIssueResponse registerCard(String mobileNo, int group) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
         CardRegisterRequest grpcCardRegisterRequest;
         grpcCardRegisterRequest = grpcTransactionGenerator.grpcCardRegisterTransaction(mobileNo, group);
         LOGGER.info("Request received from client:\n" + grpcCardRegisterRequest);
-        CardRegisterResponse grpcCardRegisterResponse = stub.registerCard(grpcCardRegisterRequest);
+        CardRegisterResponse grpcCardRegisterResponse = grpcServer().registerCard(grpcCardRegisterRequest);
         CardIssueResponse response = new CardIssueResponse();
         response.setStatus(grpcCardRegisterResponse.getStatus());
         response.setMessage(grpcCardRegisterResponse.getMsg());
@@ -49,13 +40,8 @@ public class CardGrpcImpl implements CardGrpc {
 
     @Override
     public CardStatusInquiryResponse inquiryStatus(String mobileNo, int group) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
         CardInfoRequest grpcCardInfoRequest = grpcTransactionGenerator.grpcCardInfoTransaction(mobileNo, group);
-        CardInfoResponse grpcCardInfoResponse = stub.getCardInfo(grpcCardInfoRequest);
+        CardInfoResponse grpcCardInfoResponse = grpcServer().getCardInfo(grpcCardInfoRequest);
         byte[] utf8 = grpcCardInfoResponse.getMsg().getBytes(StandardCharsets.UTF_8);
         CardStatusInquiryResponse response = new CardStatusInquiryResponse();
         response.setStatus(grpcCardInfoResponse.getStatus());

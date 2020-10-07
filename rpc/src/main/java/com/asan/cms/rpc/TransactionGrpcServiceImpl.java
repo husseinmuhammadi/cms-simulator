@@ -15,26 +15,17 @@ import org.springframework.stereotype.Component;
 import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
 
 @Component
-public class TransactionGrpcServiceImpl implements TransactionGrpcService {
+public class TransactionGrpcServiceImpl extends GrpcClientBase implements TransactionGrpcService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionGrpcServiceImpl.class);
 
     @Autowired
     GrpcTransactionGenerator grpcTransactionGenerator;
-    
-    @Autowired
-    GrpcEndpointConfiguration endpoint;
 
     @Override
     public PaymentResponse doPaymentTransaction(PaymentRequest paymentRequest) {
         LOGGER.info("Payment transaction with gRPC");
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doFinancialTransaction(
+        TransactionResponse response = grpcServer().doFinancialTransaction(
                 grpcTransactionGenerator.paymentTransaction(paymentRequest.getCardNo(), paymentRequest.getAmount(), paymentRequest.getGateway(), paymentRequest.getService(), paymentRequest.getReferenceTransactionId(), paymentRequest.getHost(), paymentRequest.getRrn())
         );
         PaymentResponse paymentResponse = new PaymentResponse(response.getStatus(), response.getMessage());
@@ -48,14 +39,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     @Override
     public DepositResponse doDepositTransaction(DepositRequest depositRequest) {
         LOGGER.info("Deposit transaction with gRPC");
-
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doFinancialTransaction(
+        TransactionResponse response = grpcServer().doFinancialTransaction(
                 grpcTransactionGenerator.depositTransaction(depositRequest.getCardNo(), depositRequest.getAmount(), depositRequest.getGateway(), depositRequest.getService(), depositRequest.getReferenceTransactionId(), depositRequest.getHost(), depositRequest.getRrn())
         );
         DepositResponse depositResponse = new DepositResponse(response.getStatus(), response.getMessage());
@@ -69,13 +53,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     @Override
     public CashoutResponse doCashoutTransaction(CashoutRequest cashoutRequest) {
         LOGGER.info("Cashout transaction with gRPC");
-
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doFinancialTransaction(
+        TransactionResponse response = grpcServer().doFinancialTransaction(
                 grpcTransactionGenerator.cashoutTransaction(cashoutRequest.getCardNo(), cashoutRequest.getAmount(), cashoutRequest.getGateway(), cashoutRequest.getService(), cashoutRequest.getReferenceTransactionId(), cashoutRequest.getHost(), cashoutRequest.getRrn())
         );
         CashoutResponse cashoutResponse = new CashoutResponse(response.getStatus(), response.getMessage());
@@ -89,14 +67,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     @Override
     public PurchaseResponse doPurchaseTransaction(PurchaseRequest purchaseRequest) {
         LOGGER.info("Purchase transaction with gRPC");
-
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doFinancialTransaction(
+        TransactionResponse response = grpcServer().doFinancialTransaction(
                 grpcTransactionGenerator.purchaseTransaction(purchaseRequest.getCardNo(), purchaseRequest.getAmount(), purchaseRequest.getGateway(), purchaseRequest.getService(), purchaseRequest.getReferenceTransactionId(), purchaseRequest.getHost(), purchaseRequest.getRrn())
         );
         PurchaseResponse purchaseResponse = new PurchaseResponse(response.getStatus(), response.getMessage());
@@ -110,13 +81,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     @Override
     public BalanceInquiryResponse doBalanceInquiryTransaction(BalanceInquiryRequest balanceInquiryRequest) {
         LOGGER.info("BalanceInquiry transaction with gRPC");
-
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doBalanceInquiry(
+        TransactionResponse response = grpcServer().doBalanceInquiry(
                 grpcTransactionGenerator.balanceInquiryTransaction(balanceInquiryRequest.getCardNo(), balanceInquiryRequest.getGateway(), balanceInquiryRequest.getService(), balanceInquiryRequest.getReferenceTransactionId(), balanceInquiryRequest.getHost())
         );
         BalanceInquiryResponse balanceInquiryResponse = new BalanceInquiryResponse(response.getStatus(), response.getMessage());
@@ -130,14 +95,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     @Override
     public StatementResponse doStatementTransaction(StatementRequest statementRequest) {
         LOGGER.info("Statement transaction with gRPC");
-
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doStatement(
+        TransactionResponse response = grpcServer().doStatement(
                 grpcTransactionGenerator.statementTransaction(statementRequest.getCardNo())
         );
         StatementResponse statementResponse = new StatementResponse(response.getStatus(), response.getMessage());
@@ -150,14 +108,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Override
     public FundTransferResponse doFundTransferTransaction(FundTransferRequest fundTransferRequest) {
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        TransactionResponse response = stub.doFundTransfer(
+        TransactionResponse response = grpcServer().doFundTransfer(
                 grpcTransactionGenerator.fundTransferTransaction(fundTransferRequest.getSourceCard(), fundTransferRequest.getDestinationCard(), fundTransferRequest.getAmount(), fundTransferRequest.getGateway(), fundTransferRequest.getService(), fundTransferRequest.getReferenceTransactionId(), fundTransferRequest.getHost())
         );
         FundTransferResponse fundTransferResponse = new FundTransferResponse(response.getStatus(), response.getMessage());
@@ -170,14 +121,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Override
     public TransactionInquiryResponse doInquiryTransaction(TransactionRequest transactionRequest) {
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
-
-        com.asan.cms.grpc.TransactionInquiryResponse grpcTransactionInquiryResponse = stub.inquiryTransaction(
+        com.asan.cms.grpc.TransactionInquiryResponse grpcTransactionInquiryResponse = grpcServer().inquiryTransaction(
                 grpcTransactionGenerator.inquiryTransaction(transactionRequest.getGateway(), transactionRequest.getService(), transactionRequest.getReferenceTransactionId(), transactionRequest.getHost())
         );
         TransactionInquiryResponse transactionInquiryResponse = new TransactionInquiryResponse();
@@ -192,12 +136,6 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
 
     @Override
     public ReversalResponse doReverseTransaction(FinancialRequest financialRequest) {
-        
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(endpoint.getServerIp(), endpoint.getServerPort())
-                .usePlaintext()
-                .build();
-
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
         com.asan.cms.grpc.TransactionRequest grpcFinancialRequest = grpcTransactionGenerator.financialTransaction(
                 TransactionProcessTypeEnum.valueOf(financialRequest.getProcessingCode()),
                 financialRequest.getCardNo(),
@@ -208,8 +146,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
                 financialRequest.getHost(),
                 financialRequest.getRrn()
         );
-
-        TransactionResponse grpcReversalResponse = stub.doTransactionReverse(
+        TransactionResponse grpcReversalResponse = grpcServer().doTransactionReverse(
                 grpcTransactionGenerator.reversalTransaction(grpcFinancialRequest)
         );
         ReversalResponse reversalResponse = new ReversalResponse(grpcReversalResponse.getStatus(), grpcReversalResponse.getMessage());
