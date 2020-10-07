@@ -1,8 +1,6 @@
 # https://stackoverflow.com/questions/53738437/php-application-cant-connect-to-mariadb-using-docker-compose
 version: "3.8"
-
 services:
-
   web:
     links: 
       - db
@@ -20,7 +18,11 @@ services:
       - DATABASE_URL=jdbc:mariadb://db:3306/cms
       - DATABASE_USERNAME=cmsuser
       - DATABASE_PASSWORD=cmspass
-    
+      - GRPC_SERVER_HOST=cms-rpc
+      - GRPC_SERVER_PORT=8000
+    networks: 
+      - sp-cms_cms-network
+
   db:
     image: mariadb
     container_name: mariadb
@@ -36,7 +38,9 @@ services:
       MYSQL_DATABASE: cms
       MYSQL_USER: cmsuser
       MYSQL_PASSWORD: cmspass
+    networks: 
+      - sp-cms_cms-network
 
 networks:
-  default:
-    driver: bridge
+  sp-cms_cms-network:
+    external: true

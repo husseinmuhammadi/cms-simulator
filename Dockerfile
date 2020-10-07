@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM maven:3.6.0-jdk-11-slim AS build
+FROM maven:3.6.0-jdk-11 AS build
 
 # Since we want to execute the mvn command with RUN (and not when the container gets started),
 # we have to do here some manual setup which would be made by the maven's entrypoint script
@@ -17,7 +17,7 @@ RUN mvn -f parent package -DskipTests -Pstage
 #
 # Package stage
 #
-FROM openjdk:11-jre-slim
+FROM openjdk:11
 COPY --from=build /workspace/web-app/target/cms-simulator.jar /app/cms.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/cms.jar"]
