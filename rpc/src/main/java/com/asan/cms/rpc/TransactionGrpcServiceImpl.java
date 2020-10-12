@@ -1,8 +1,6 @@
 package com.asan.cms.rpc;
 
-import com.asan.cms.dto.*;
-import com.asan.cms.grpc.TransactionResponse;
-import com.asan.cms.grpc.TransactionServiceGrpc;
+import com.asan.cms.grpc.*;
 import com.asan.cms.rpc.configuration.GrpcEndpointConfiguration;
 import com.asan.cms.type.TransactionProcessTypeEnum;
 import org.slf4j.Logger;
@@ -10,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 @Component
@@ -24,12 +23,12 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     GrpcTransactionGenerator grpcTransactionGenerator;
 
     @Override
-    public PaymentResponse doPaymentTransaction(PaymentRequest paymentRequest) {
+    public com.asan.cms.dto.PaymentResponse doPaymentTransaction(com.asan.cms.dto.PaymentRequest paymentRequest) {
         LOGGER.info("Payment transaction with gRPC");
 
-        return new GrpcServer<com.asan.cms.grpc.TransactionRequest, TransactionResponse>(endpoint) {
+        return new GrpcServer<TransactionRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.TransactionRequest getGrpcRequest() {
+            TransactionRequest getGrpcRequest() {
                 return grpcTransactionGenerator.paymentTransaction(
                         paymentRequest.getCardNo(),
                         paymentRequest.getAmount(),
@@ -41,11 +40,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
-            PaymentResponse paymentResponse = new PaymentResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.PaymentResponse paymentResponse = new com.asan.cms.dto.PaymentResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             paymentResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             paymentResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             paymentResponse.setTranId(grpcResponse.getTranId());
@@ -55,12 +54,12 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public DepositResponse doDepositTransaction(DepositRequest depositRequest) {
+    public com.asan.cms.dto.DepositResponse doDepositTransaction(com.asan.cms.dto.DepositRequest depositRequest) {
         LOGGER.info("Deposit transaction with gRPC");
 
-        return new GrpcServer<com.asan.cms.grpc.TransactionRequest, TransactionResponse>(endpoint) {
+        return new GrpcServer<TransactionRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.TransactionRequest getGrpcRequest() {
+            TransactionRequest getGrpcRequest() {
                 return grpcTransactionGenerator.depositTransaction(
                         depositRequest.getCardNo(),
                         depositRequest.getAmount(),
@@ -73,11 +72,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
-            DepositResponse depositResponse = new DepositResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.DepositResponse depositResponse = new com.asan.cms.dto.DepositResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             depositResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             depositResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             depositResponse.setTranId(grpcResponse.getTranId());
@@ -87,12 +86,12 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public CashoutResponse doCashoutTransaction(CashoutRequest cashoutRequest) {
+    public com.asan.cms.dto.CashoutResponse doCashoutTransaction(com.asan.cms.dto.CashoutRequest cashoutRequest) {
         LOGGER.info("Cashout transaction with gRPC");
 
-        return new GrpcServer<com.asan.cms.grpc.TransactionRequest, TransactionResponse>(endpoint) {
+        return new GrpcServer<TransactionRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.TransactionRequest getGrpcRequest() {
+            TransactionRequest getGrpcRequest() {
                 return grpcTransactionGenerator.cashoutTransaction(
                         cashoutRequest.getCardNo(),
                         cashoutRequest.getAmount(),
@@ -105,11 +104,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
-            CashoutResponse cashoutResponse = new CashoutResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.CashoutResponse cashoutResponse = new com.asan.cms.dto.CashoutResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             cashoutResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             cashoutResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             cashoutResponse.setTranId(grpcResponse.getTranId());
@@ -119,12 +118,12 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public PurchaseResponse doPurchaseTransaction(PurchaseRequest purchaseRequest) {
+    public com.asan.cms.dto.PurchaseResponse doPurchaseTransaction(com.asan.cms.dto.PurchaseRequest purchaseRequest) {
         LOGGER.info("Purchase transaction with gRPC");
 
-        return new GrpcServer<com.asan.cms.grpc.TransactionRequest, TransactionResponse>(endpoint) {
+        return new GrpcServer<TransactionRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.TransactionRequest getGrpcRequest() {
+            TransactionRequest getGrpcRequest() {
                 return grpcTransactionGenerator.purchaseTransaction(
                         purchaseRequest.getCardNo(),
                         purchaseRequest.getAmount(),
@@ -137,11 +136,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
-            PurchaseResponse purchaseResponse = new PurchaseResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.PurchaseResponse purchaseResponse = new com.asan.cms.dto.PurchaseResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             purchaseResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             purchaseResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             purchaseResponse.setTranId(grpcResponse.getTranId());
@@ -151,12 +150,12 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public BalanceInquiryResponse doBalanceInquiryTransaction(BalanceInquiryRequest balanceInquiryRequest) {
+    public com.asan.cms.dto.BalanceInquiryResponse doBalanceInquiryTransaction(com.asan.cms.dto.BalanceInquiryRequest balanceInquiryRequest) {
         LOGGER.info("BalanceInquiry transaction with gRPC");
 
-        return new GrpcServer<com.asan.cms.grpc.BalanceInquiryRequest, TransactionResponse>(endpoint) {
+        return new GrpcServer<BalanceInquiryRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.BalanceInquiryRequest getGrpcRequest() {
+            BalanceInquiryRequest getGrpcRequest() {
                 return grpcTransactionGenerator.balanceInquiryTransaction(
                         balanceInquiryRequest.getCardNo(),
                         balanceInquiryRequest.getGateway(),
@@ -167,11 +166,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.BalanceInquiryRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<BalanceInquiryRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doBalanceInquiry;
             }
         }.call(grpcResponse -> {
-            BalanceInquiryResponse balanceInquiryResponse = new BalanceInquiryResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.BalanceInquiryResponse balanceInquiryResponse = new com.asan.cms.dto.BalanceInquiryResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             balanceInquiryResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             balanceInquiryResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             balanceInquiryResponse.setTranId(grpcResponse.getTranId());
@@ -181,21 +180,21 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public StatementResponse doStatementTransaction(StatementRequest statementRequest) {
+    public com.asan.cms.dto.StatementResponse doStatementTransaction(com.asan.cms.dto.StatementRequest statementRequest) {
         LOGGER.info("Statement transaction with gRPC");
 
-        return new GrpcServer<com.asan.cms.grpc.StatementRequest, TransactionResponse>(endpoint) {
+        return new GrpcServer<StatementRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.StatementRequest getGrpcRequest() {
+            StatementRequest getGrpcRequest() {
                 return grpcTransactionGenerator.statementTransaction(statementRequest.getCardNo());
             }
 
             @Override
-            Function<com.asan.cms.grpc.StatementRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<StatementRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doStatement;
             }
         }.call(grpcResponse -> {
-            StatementResponse statementResponse = new StatementResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.StatementResponse statementResponse = new com.asan.cms.dto.StatementResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             statementResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             statementResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             statementResponse.setTranId(grpcResponse.getTranId());
@@ -205,10 +204,10 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public FundTransferResponse doFundTransferTransaction(FundTransferRequest fundTransferRequest) {
-        return new GrpcServer<com.asan.cms.grpc.FundTransferRequest, TransactionResponse>(endpoint) {
+    public com.asan.cms.dto.FundTransferResponse doFundTransferTransaction(com.asan.cms.dto.FundTransferRequest fundTransferRequest) {
+        return new GrpcServer<FundTransferRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.FundTransferRequest getGrpcRequest() {
+            FundTransferRequest getGrpcRequest() {
                 return grpcTransactionGenerator.fundTransferTransaction(
                         fundTransferRequest.getSourceCard(),
                         fundTransferRequest.getDestinationCard(),
@@ -221,11 +220,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.FundTransferRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<FundTransferRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doFundTransfer;
             }
         }.call(grpcResponse -> {
-            FundTransferResponse fundTransferResponse = new FundTransferResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
+            com.asan.cms.dto.FundTransferResponse fundTransferResponse = new com.asan.cms.dto.FundTransferResponse(grpcResponse.getStatus(), grpcResponse.getMessage());
             fundTransferResponse.setAppliedAmount(grpcResponse.getAppliedAmount());
             fundTransferResponse.setRemainedBalance(grpcResponse.getRemainedBalance());
             fundTransferResponse.setTranId(grpcResponse.getTranId());
@@ -235,10 +234,10 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public TransactionInquiryResponse doInquiryTransaction(TransactionRequest transactionRequest) {
-        return new GrpcServer<com.asan.cms.grpc.TransactionInquiryRequest, com.asan.cms.grpc.TransactionInquiryResponse>(endpoint) {
+    public com.asan.cms.dto.TransactionInquiryResponse doInquiryTransaction(com.asan.cms.dto.TransactionRequest transactionRequest) {
+        return new GrpcServer<TransactionInquiryRequest, TransactionInquiryResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.TransactionInquiryRequest getGrpcRequest() {
+            TransactionInquiryRequest getGrpcRequest() {
                 return grpcTransactionGenerator.inquiryTransaction(
                         transactionRequest.getGateway(),
                         transactionRequest.getService(),
@@ -248,11 +247,11 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.TransactionInquiryRequest, com.asan.cms.grpc.TransactionInquiryResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionInquiryRequest, TransactionInquiryResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::inquiryTransaction;
             }
         }.call(grpcTransactionInquiryResponse -> {
-            TransactionInquiryResponse transactionInquiryResponse = new TransactionInquiryResponse();
+            com.asan.cms.dto.TransactionInquiryResponse transactionInquiryResponse = new com.asan.cms.dto.TransactionInquiryResponse();
             transactionInquiryResponse.setStatus(grpcTransactionInquiryResponse.getStatus());
             transactionInquiryResponse.setTransactionStatus(grpcTransactionInquiryResponse.getTranStatus());
             transactionInquiryResponse.setRrn(grpcTransactionInquiryResponse.getRrn());
@@ -263,13 +262,13 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
     }
 
     @Override
-    public ReversalResponse doReverseTransaction(FinancialRequest financialRequest) {
-        return new GrpcServer<com.asan.cms.grpc.TransactionRequest, TransactionResponse>(endpoint) {
+    public com.asan.cms.dto.ReversalResponse doReverseTransaction(com.asan.cms.dto.FinancialRequest financialRequest) {
+        return new GrpcServer<TransactionRequest, TransactionResponse>(endpoint) {
             @Override
-            com.asan.cms.grpc.TransactionRequest getGrpcRequest() {
+            TransactionRequest getGrpcRequest() {
                 return grpcTransactionGenerator.reversalTransaction(
                         grpcTransactionGenerator.financialTransaction(
-                                TransactionProcessTypeEnum.valueOf(financialRequest.getProcessingCode()),
+                                Objects.requireNonNull(TransactionProcessTypeEnum.valueOf(financialRequest.getProcessingCode())),
                                 financialRequest.getCardNo(),
                                 financialRequest.getAmount(),
                                 financialRequest.getGateway(),
@@ -282,7 +281,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<com.asan.cms.grpc.TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
                 return stub::doTransactionReverse;
             }
         }.call(grpcReversalResponse -> {
