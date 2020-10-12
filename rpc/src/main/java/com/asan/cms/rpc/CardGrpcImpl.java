@@ -4,50 +4,68 @@ import com.asan.cms.dto.CardIssueResponse;
 import com.asan.cms.dto.CardStatusInquiryResponse;
 import com.asan.cms.grpc.*;
 import com.asan.cms.rpc.configuration.GrpcEndpointConfiguration;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-
-import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
+import java.util.function.Function;
 
 @Component
-public class CardGrpcImpl extends GrpcClientBase implements CardGrpc {
+public class CardGrpcImpl implements CardGrpc {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(CardGrpcImpl.class);
+
+    @Autowired
+    GrpcEndpointConfiguration endpoint;
 
     @Autowired
     GrpcTransactionGenerator grpcTransactionGenerator;
 
     @Override
     public CardIssueResponse registerCard(String mobileNo, int group) {
-        CardRegisterRequest grpcCardRegisterRequest;
-        grpcCardRegisterRequest = grpcTransactionGenerator.grpcCardRegisterTransaction(mobileNo, group);
-        LOGGER.info("Request received from client:\n" + grpcCardRegisterRequest);
-        CardRegisterResponse grpcCardRegisterResponse = grpcServer().registerCard(grpcCardRegisterRequest);
-        CardIssueResponse response = new CardIssueResponse();
-        response.setStatus(grpcCardRegisterResponse.getStatus());
-        response.setMessage(grpcCardRegisterResponse.getMsg());
-        response.setCardNo(grpcCardRegisterResponse.getCardNo());
-        LOGGER.info("Response from server: ");
-        LOGGER.info("status: {}", grpcCardRegisterResponse.getStatus());
-        return response;
+        LOGGER.info("Issue a new card based on mobile number: {}, card group: {}", mobileNo, group);
+
+        return new GrpcServer<CardRegisterRequest, CardRegisterResponse>(endpoint) {
+            @Override
+            CardRegisterRequest getGrpcRequest() {
+                return grpcTransactionGenerator.grpcCardRegisterTransaction(mobileNo, group);
+            }
+
+            @Override
+            Function<CardRegisterRequest, CardRegisterResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+                return stub::registerCard;
+            }
+        }.call(grpcResponse -> {
+            CardIssueResponse response = new CardIssueResponse();
+            response.setStatus(grpcResponse.getStatus());
+            response.setMessage(grpcResponse.getMsg());
+            response.setCardNo(grpcResponse.getCardNo());
+            return response;
+        });
     }
 
     @Override
     public CardStatusInquiryResponse inquiryStatus(String mobileNo, int group) {
-        CardInfoRequest grpcCardInfoRequest = grpcTransactionGenerator.grpcCardInfoTransaction(mobileNo, group);
-        CardInfoResponse grpcCardInfoResponse = grpcServer().getCardInfo(grpcCardInfoRequest);
-        byte[] utf8 = grpcCardInfoResponse.getMsg().getBytes(StandardCharsets.UTF_8);
-        CardStatusInquiryResponse response = new CardStatusInquiryResponse();
-        response.setStatus(grpcCardInfoResponse.getStatus());
-        response.setMessage(grpcCardInfoResponse.getMsg());
-        response.setCardNo(grpcCardInfoResponse.getCardNo());
-        response.setCardStatus(grpcCardInfoResponse.getCardStat());
-        return response;
+        LOGGER.info("Inquiry card status for given mobile number: {}, card group: {}", mobileNo, group);
+
+        return new GrpcServer<CardInfoRequest, CardInfoResponse>(endpoint) {
+            @Override
+            CardInfoRequest getGrpcRequest() {
+                return grpcTransactionGenerator.grpcCardInfoTransaction(mobileNo, group);
+            }
+
+            @Override
+            Function<CardInfoRequest, CardInfoResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+                return stub::getCardInfo;
+            }
+        }.call(grpcResponse -> {
+            CardStatusInquiryResponse response = new CardStatusInquiryResponse();
+            response.setStatus(grpcResponse.getStatus());
+            response.setMessage(grpcResponse.getMsg());
+            response.setCardNo(grpcResponse.getCardNo());
+            response.setCardStatus(grpcResponse.getCardStat());
+            return response;
+        });
     }
 }
