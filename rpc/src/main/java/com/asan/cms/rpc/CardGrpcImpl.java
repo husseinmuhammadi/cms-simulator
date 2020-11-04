@@ -33,7 +33,7 @@ public class CardGrpcImpl implements CardGrpc {
             }
 
             @Override
-            Function<CardRegisterRequest, CardRegisterResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<CardRegisterRequest, CardRegisterResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::registerCard;
             }
         }.call(grpcResponse -> {
@@ -56,7 +56,7 @@ public class CardGrpcImpl implements CardGrpc {
             }
 
             @Override
-            Function<CardInfoRequest, CardInfoResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<CardInfoRequest, CardInfoResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::getCardInfo;
             }
         }.call(grpcResponse -> {

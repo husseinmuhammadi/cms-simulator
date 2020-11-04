@@ -1,6 +1,6 @@
 package com.asan.cms.rpc;
 
-import com.asan.cms.grpc.TransactionServiceGrpc;
+import com.asan.cms.grpc.CMSServiceGrpc;
 import com.asan.cms.rpc.configuration.GrpcEndpointConfiguration;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import static com.asan.cms.grpc.TransactionServiceGrpc.newBlockingStub;
 
 public abstract class GrpcServer<T, R> {
 
@@ -24,7 +22,7 @@ public abstract class GrpcServer<T, R> {
 
     abstract T getGrpcRequest();
 
-    abstract Function<T, R> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub);
+    abstract Function<T, R> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub);
 
     public R call() {
         LOGGER.info("Grpc call {}:{}", endpoint.getServerIp(), endpoint.getServerPort());
@@ -34,7 +32,7 @@ public abstract class GrpcServer<T, R> {
                 .usePlaintext()
                 .build();
 
-        TransactionServiceGrpc.TransactionServiceBlockingStub stub = newBlockingStub(channel);
+        CMSServiceGrpc.CMSServiceBlockingStub stub = CMSServiceGrpc.newBlockingStub(channel);
         R grpcResponse = getGrpcMethod(stub).apply(getGrpcRequest());
         LOGGER.info("Grpc response {}", grpcResponse.toString());
         channel.shutdown();

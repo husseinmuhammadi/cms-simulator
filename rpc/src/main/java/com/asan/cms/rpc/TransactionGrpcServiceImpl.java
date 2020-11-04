@@ -40,7 +40,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
@@ -72,7 +72,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
@@ -104,7 +104,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
@@ -136,7 +136,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doFinancialTransaction;
             }
         }.call(grpcResponse -> {
@@ -166,7 +166,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<BalanceInquiryRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<BalanceInquiryRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doBalanceInquiry;
             }
         }.call(grpcResponse -> {
@@ -190,7 +190,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<StatementRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<StatementRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doStatement;
             }
         }.call(grpcResponse -> {
@@ -220,7 +220,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<FundTransferRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<FundTransferRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doFundTransfer;
             }
         }.call(grpcResponse -> {
@@ -247,7 +247,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<TransactionInquiryRequest, TransactionInquiryResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionInquiryRequest, TransactionInquiryResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::inquiryTransaction;
             }
         }.call(grpcTransactionInquiryResponse -> {
@@ -281,7 +281,7 @@ public class TransactionGrpcServiceImpl implements TransactionGrpcService {
             }
 
             @Override
-            Function<TransactionRequest, TransactionResponse> getGrpcMethod(TransactionServiceGrpc.TransactionServiceBlockingStub stub) {
+            Function<TransactionRequest, TransactionResponse> getGrpcMethod(CMSServiceGrpc.CMSServiceBlockingStub stub) {
                 return stub::doTransactionReverse;
             }
         }.call(grpcReversalResponse -> {
