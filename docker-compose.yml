@@ -10,7 +10,7 @@ services:
     ports:
       - "8090:8090"
     restart: always  
-    image: superpay-cms-simulator:1.0.0.2
+    image: superpay-cms-simulator:1.0.0.6
     container_name: superpay-cms-simulator
     expose: 
       - 8090
@@ -18,10 +18,10 @@ services:
       - DATABASE_URL=jdbc:mariadb://db:3306/cms
       - DATABASE_USERNAME=cmsuser
       - DATABASE_PASSWORD=cmspass
-      - GRPC_SERVER_HOST=superpay-cms-server
-      - GRPC_SERVER_PORT=8000
-      # - GRPC_SERVER_HOST=172.25.25.74
-      # - GRPC_SERVER_PORT=31076
+      # - GRPC_SERVER_HOST=superpay-cms-server
+      # - GRPC_SERVER_PORT=8000
+      - GRPC_SERVER_HOST=172.25.25.74
+      - GRPC_SERVER_PORT=31076
     networks: 
       - superpay_network
 

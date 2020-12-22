@@ -8,7 +8,6 @@
         <groupId>com.asan.cms.simulator</groupId>
         <artifactId>cms-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../parent</relativePath>
     </parent>
 
     <artifactId>cms-type</artifactId>

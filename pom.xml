@@ -24,12 +24,12 @@
     </properties>
 
     <modules>
-        <module>../type</module>
-        <module>../model</module>
-        <module>../api</module>
-        <module>../service</module>
-        <module>../rpc</module>
-        <module>../web-app</module>
+        <module>type</module>
+        <module>model</module>
+        <module>api</module>
+        <module>service</module>
+        <module>rpc</module>
+        <module>web-app</module>
         <!--<module>../web-api</module>-->
     </modules>
 
