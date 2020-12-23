@@ -2,19 +2,19 @@
 version: "3.8"
 services:
   web:
-    links: 
+    links:
       - db
     build:
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
       context: .
     ports:
       - "8090:8090"
-    restart: always  
-    image: superpay-cms-simulator:1.0.0.6
+    restart: always
+    image: superpay-cms-simulator
     container_name: superpay-cms-simulator
-    expose: 
+    expose:
       - 8090
-    environment:       
+    environment:
       - DATABASE_URL=jdbc:mariadb://db:3306/cms
       - DATABASE_USERNAME=cmsuser
       - DATABASE_PASSWORD=cmspass
@@ -22,7 +22,7 @@ services:
       # - GRPC_SERVER_PORT=8000
       - GRPC_SERVER_HOST=172.25.25.74
       - GRPC_SERVER_PORT=31076
-    networks: 
+    networks:
       - superpay_network
 
   db:
@@ -34,13 +34,13 @@ services:
       # - ./mysql:/var/lib/mysql
     ports:
       - "43306:3306"
-    environment:      
+    environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: cms
       MYSQL_USER: cmsuser
       MYSQL_PASSWORD: cmspass
-    networks: 
+    networks:
       - superpay_network
 
 networks:
